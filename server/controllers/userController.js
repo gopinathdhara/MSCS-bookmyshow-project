@@ -1,6 +1,7 @@
 import express from "express";
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
+import { signToken } from "../utils/jwt.js";
 
 export const register = async (req, res, next) => {
   try {
@@ -30,7 +31,7 @@ export const register = async (req, res, next) => {
   }
 };
 
-export const login = async (req, res) => {
+export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
@@ -49,14 +50,44 @@ export const login = async (req, res) => {
       });
     }
 
+    // create jwt token by passing payload
+    const token = signToken({ userId: user._id.toString() });
+
     res.status(200).json({
       success: true,
       message: "Login successful",
+      data: {
+        token,
+      },
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Internal server error",
+    console.log(error);
+    next(error);
+  }
+};
+
+export const getCurrentUser = async (req, res, next) => {
+  try {
+    const userId = req.userId;
+
+    const userDetails = await User.findById(userId).select("-password");
+
+    if (!userDetails) {
+      return res.status(404).json({
+        success: false,
+        message: "User details not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "User details fetched successfully",
+      data: {
+        userDetails,
+      },
     });
+  } catch (error) {
+    console.log(error);
+    next(error);
   }
 };
