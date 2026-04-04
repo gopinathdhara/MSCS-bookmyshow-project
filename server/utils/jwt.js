@@ -6,7 +6,8 @@ export const signToken = (payload) => {
     if (!secret) {
       throw new Error("JWT SECRET KEY is not defined");
     }
-    return jwt.sign(payload, secret, { expiresIn: "1h" });
+    // creating JWT token
+    return jwt.sign(payload, secret, { expiresIn: "1m" });
   } catch (error) {
     console.error("Error generating token:", error.message);
     throw error;

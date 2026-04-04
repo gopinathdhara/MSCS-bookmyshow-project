@@ -19,7 +19,7 @@ export const authMiddleware = (req, res, next) => {
         message: "JWT SECRET KEY is not defined",
       });
     }
-    // verify the token
+    // verify the token using secret key
     const decoded = jwt.verify(token, secret);
     req.userId = decoded.userId;
     next();
