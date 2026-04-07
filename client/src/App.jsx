@@ -6,11 +6,12 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Admin from "./pages/Admin";
 import Navbar from "./components/Navbar";
 import "./components/Navbar.css";
+import EditMovie from "./pages/EditMovie";
 
 function App() {
   return (
     <BrowserRouter>
-     <Navbar />
+      <Navbar />
       <Routes>
         <Route
           path="/"
@@ -27,6 +28,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Admin />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/edit-movie/:id"
+          element={
+            <ProtectedRoute>
+              <EditMovie />
             </ProtectedRoute>
           }
         />

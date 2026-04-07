@@ -1,5 +1,5 @@
 import express from "express";
-import { addMovie, getAllMovies } from "../controllers/movieController.js";
+import { addMovie, getAllMovies,getMovieByID,updateMovie } from "../controllers/movieController.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 import { adminMiddleware } from "../middlewares/adminMiddleware.js";
 
@@ -10,5 +10,6 @@ movieRouter.get(
   authMiddleware,
   getAllMovies,
 );
-
+movieRouter.get("/get-single-movie/:id", authMiddleware, getMovieByID);
+movieRouter.put("/update-movie/:id", authMiddleware, adminMiddleware,updateMovie);
 export default movieRouter;

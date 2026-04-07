@@ -3,6 +3,7 @@ import { useState } from "react";
 import { getAllMovies } from "../api/movies";
 import { useEffect } from "react";
 import MovieForm from "./MovieForm";
+import { Link } from "react-router-dom";
 
 function MovieList() {
   const [movies, setMovies] = useState([]);
@@ -54,6 +55,16 @@ function MovieList() {
       title: "Language",
       dataIndex: "language",
     },
+    {
+    title: "Action",
+    render: (_, record) => (
+      <div style={{ display: "flex", gap: "10px" }}>
+        <Link to={`/admin/edit-movie/${record._id}`}>
+          <Button type="primary">Edit</Button>
+        </Link>
+      </div>
+    ),
+  },
   ];
 
   return (

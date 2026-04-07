@@ -1,5 +1,7 @@
 import movie from "../models/movieModel.js";
+import mongoose from "mongoose";
 
+// add new movie
 export const addMovie = async (req, res, next) => {
   try {
     await movie.create(req.body);
@@ -13,6 +15,7 @@ export const addMovie = async (req, res, next) => {
   }
 };
 
+// list of all movies
 export const getAllMovies = async (req, res, next) => {
   try {
     //Latest movie first
@@ -21,6 +24,67 @@ export const getAllMovies = async (req, res, next) => {
       success: true,
       message: "all Movie fetched successfully",
       data: movies,
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+// get single movie
+export const getMovieByID = async (req, res, next) => {
+  try {
+    //find movie by id
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid movie ID",
+      });
+    }
+    let movieData = await movie.findById(id);
+    if (!movieData) {
+      return res.status(404).json({
+        success: false,
+        message: "Movie not found",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "Movie fetched successfully",
+      data: movieData,
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+// update movie
+export const updateMovie = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid movie ID",
+      });
+    }
+
+    const updatedMovie = await movie.findByIdAndUpdate(id, req.body, {
+      new: true, // return updated data
+      runValidators: true, // run schema validation
+    });
+    if (!updatedMovie) {
+      return res.status(404).json({
+        success: false,
+        message: "Movie not found",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "Movie updated successfully",
+      data: updatedMovie,
     });
   } catch (error) {
     console.log(error);

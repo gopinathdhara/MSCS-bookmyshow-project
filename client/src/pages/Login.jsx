@@ -12,7 +12,10 @@ function Login() {
     try {
       const res = await loginUser(values);
       const token = res.data?.token;
+      const role = res.data?.role;
+      
       localStorage.setItem("token", token);
+      localStorage.setItem("role", role);
 
       message.success("Login successful");
       setTimeout(() => {
