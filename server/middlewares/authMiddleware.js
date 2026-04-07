@@ -22,6 +22,7 @@ export const authMiddleware = (req, res, next) => {
     // verify the token using secret key
     const decoded = jwt.verify(token, secret);
     req.userId = decoded.userId;
+    req.role = decoded.role;
     next();
   } catch (error) {
     return res.status(401).json({

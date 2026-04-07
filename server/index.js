@@ -4,6 +4,7 @@ import { logger } from "./middlewares/loggerMiddleware.js";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import cors from "cors";
+import movieRouter from "./routes/movieRoutes.js";
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.use(express.json());
 app.use(logger);
 
 app.use("/api", userRoute);
+app.use("/api/movies", movieRouter);
 
 //404 handler
 app.use((req, res) => {

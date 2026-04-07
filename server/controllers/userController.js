@@ -23,7 +23,7 @@ export const register = async (req, res, next) => {
 
     res.status(201).json({
       success: true,
-      data: "User registered successfully",
+      message: "User registered successfully",
     });
   } catch (error) {
     console.log(error);
@@ -51,7 +51,7 @@ export const login = async (req, res, next) => {
     }
 
     // create jwt token by passing payload
-    const token = signToken({ userId: user._id.toString() });
+    const token = signToken({ userId: user._id.toString(),role:user.role });
 
     res.status(200).json({
       success: true,

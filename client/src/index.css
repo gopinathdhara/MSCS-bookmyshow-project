@@ -266,6 +266,9 @@ p {
 a {
   color: white !important;
 }
+.ant-form-item-label > label {
+  color: black !important;
+}
 
 h1 {
   font-family: "Poppins", sans-serif;
@@ -302,6 +305,135 @@ h1 {
   overflow-y: auto;
   width: 100%;
 }
+
+
+.ant-pagination .ant-pagination-item a {
+  color: black !important;
+}
+
+/*============for movie ===================*/
+
+.movie-list-page {
+  padding: 24px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #5b7cff, #7a4fd3);
+}
+
+.movie-table {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.add-movie-btn {
+  border-radius: 10px !important;
+  height: 42px !important;
+  padding: 0 18px !important;
+  font-weight: 600;
+}
+
+.movie-table .ant-table {
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.movie-table .ant-table-thead > tr > th {
+  background: #f8fafc !important;
+  color: #1f2937 !important;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.movie-table .ant-table-tbody > tr > td {
+  vertical-align: middle;
+  font-size: 14px;
+}
+
+.movie-table .ant-table-tbody > tr:hover > td {
+  background: #f5f8ff !important;
+}
+
+.movie-poster {
+  width: 70px;
+  height: 95px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.movie-title {
+  font-weight: 600;
+  color: #111827;
+}
+
+.movie-description {
+  color: #4b5563;
+}
+
+.movie-language {
+  font-weight: 500;
+  color: #374151;
+}
+.add-btn {
+  margin: 20px 0;  /* top & bottom spacing */
+  height: 42px;
+  border-radius: 10px;
+  font-weight: 600;
+  padding: 0 20px;
+  background-color: rgb(244, 244, 183);
+  color: black;
+}
+.ant-tabs-tab-btn{
+  color: white;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 20px;
+  margin-left: 10px;
+}
+
+/* Active tab text color */
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: white !important;
+}
+
+/* Inactive tab text color (optional for consistency) */
+.ant-tabs-tab .ant-tabs-tab-btn {
+  color: #e0e0e0;
+}
+
+/* Remove blue underline (ink bar) or change color */
+.ant-tabs-ink-bar {
+  background: white !important;
+}
+
+.admin-heading {
+  margin: 0;
+  padding: 0;
+  color: white;
+  text-align: center;
+  font-size: 32px;
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+@media (max-width: 768px) {
+  .movie-list-page {
+    padding: 14px;
+  }
+
+  .movie-list-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .add-movie-btn {
+    width: 100%;
+  }
+}
+/*===========================*/
+
+
 @-webkit-keyframes spin {
   0% {
     -webkit-transform: rotate(0deg);
