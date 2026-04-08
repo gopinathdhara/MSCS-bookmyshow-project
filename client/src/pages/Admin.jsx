@@ -18,7 +18,7 @@ function Admin() {
 
   return (
     <div className="p-4">
-      <p class="admin-heading">Admin</p>
+      {/* <p class="admin-heading">Admin</p> */}
       <Tabs items={tabItems} />
     </div>
   );

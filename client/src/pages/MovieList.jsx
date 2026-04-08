@@ -1,14 +1,15 @@
-import { Table, Button } from "antd";
 import { useState } from "react";
-import { getAllMovies } from "../api/movies";
+import { deleteMovie, getAllMovies } from "../api/movies";
 import { useEffect } from "react";
 import MovieForm from "./MovieForm";
-import { Link } from "react-router-dom";
+import { Button, Table, message, Popconfirm, Tooltip } from "antd";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 
 function MovieList() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const [selectedMovie, setSelectedMovie] = useState(null);
 
   const fetchMovies = async () => {
     try {
@@ -16,6 +17,18 @@ function MovieList() {
       const res = await getAllMovies();
       setMovies(res.data);
       setLoading(false);
+    } catch (err) {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteRecord = async (movie) => {
+    try {
+      setLoading(true);
+      const res = await deleteMovie({ movieId: movie._id });
+      message.success("Deleted the movie");
+      setLoading(false);
+      fetchMovies();
     } catch (err) {
       setLoading(false);
     }
@@ -55,32 +68,56 @@ function MovieList() {
       title: "Language",
       dataIndex: "language",
     },
+
     {
-    title: "Action",
-    render: (_, record) => (
-      <div style={{ display: "flex", gap: "10px" }}>
-        <Link to={`/admin/edit-movie/${record._id}`}>
-          <Button type="primary">Edit</Button>
-        </Link>
-      </div>
-    ),
-  },
+      title: "Actions",
+      render: (_, record) => (
+        <div>
+          <Tooltip title="Edit">
+            <Button
+              icon={<EditOutlined />}
+              onClick={() => {
+                setSelectedMovie(record);
+                setOpen(true);
+              }}
+            ></Button>
+          </Tooltip>
+          &nbsp;&nbsp;
+          <Popconfirm
+            title="Delete the movie?"
+            description="Are you sure to delete this movie?"
+            onConfirm={() => handleDeleteRecord(record)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button danger icon={<DeleteOutlined />} className="delete-btn" />
+          </Popconfirm>
+        </div>
+      ),
+    },
   ];
 
   return (
-    <div className="movie-list-page">
-      <Button onClick={() => setOpen(true)} type="primary" className="add-btn">
+    <div className=" ">
+      <h1 className="admin-movie-list">Admin - Movie List</h1>
+      <Button
+        onClick={() => {
+          setOpen(true);
+          setSelectedMovie(null);
+        }}
+        type="primary"
+        className="add-movie-btn"
+      >
         Add Movie
       </Button>
-      <br />
-      <Table
-        dataSource={movies}
-        loading={loading}
-        columns={tableColumns}
-        rowKey="_id"
-        className="movie-table"
+      <Table dataSource={movies} loading={loading} columns={tableColumns} />
+      <MovieForm
+        open={open}
+        setOpen={setOpen}
+        onSuccess={fetchMovies}
+        selectedMovie={selectedMovie}
+        setSelectedMovie={setSelectedMovie}
       />
-      <MovieForm open={open} setOpen={setOpen} onSuccess={fetchMovies} />
     </div>
   );
 }

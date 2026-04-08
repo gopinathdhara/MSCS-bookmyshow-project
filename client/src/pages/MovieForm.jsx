@@ -1,9 +1,16 @@
 import React, { useState } from "react";
 
 import { Form, Input, Modal, message } from "antd";
-import { addMovie } from "../api/movies";
+import { addMovie, updateMovie } from "../api/movies";
+import { useEffect } from "react";
 
-const MovieForm = ({ open, setOpen, onSuccess }) => {
+const MovieForm = ({
+  open,
+  setOpen,
+  onSuccess,
+  selectedMovie,
+  setSelectedMovie,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
 
@@ -13,17 +20,36 @@ const MovieForm = ({ open, setOpen, onSuccess }) => {
   };
 
   const onFinish = async (values) => {
-    await addMovie(values);
-    message.success("Movie added successfully");
-    form.resetFields();
+    console.log(values);
+    selectedMovie
+      ? await updateMovie({ values, movieId: selectedMovie._id })
+      : await addMovie(values);
     setOpen(false);
+    setSelectedMovie(null);
     onSuccess();
   };
+
+  useEffect(() => {
+    console.log(selectedMovie);
+    if (selectedMovie) {
+      form.setFieldsValue({
+        title: selectedMovie.title,
+        posterUrl: selectedMovie.posterUrl,
+        description: selectedMovie.description,
+        duration: selectedMovie.duration,
+        genre: selectedMovie.genre,
+        language: selectedMovie.language,
+        releaseDate: selectedMovie.releaseDate,
+      });
+    } else {
+      form.resetFields();
+    }
+  }, [selectedMovie, form]);
 
   return (
     <>
       <Modal
-        title="Add Movie"
+        title={selectedMovie ? "Edit Movie" : "Add Movie"}
         closable={{ "aria-label": "Custom Close Button" }}
         open={open}
         onOk={handleOk}
