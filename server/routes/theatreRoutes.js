@@ -8,6 +8,10 @@ import {
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 import { partnerMiddleware } from "../middlewares/partnerMiddleware.js";
 import { adminMiddleware } from "../middlewares/adminMiddleware.js";
+import {
+  validateAddTheatre,
+  validateApproveTheatre,
+} from "../middlewares/theatreValidation.js";
 
 const theatreRouter = express.Router();
 
@@ -17,6 +21,7 @@ theatreRouter.post(
   "/add-theatre",
   authMiddleware,
   partnerMiddleware,
+  validateAddTheatre,
   addTheatre,
 );
 theatreRouter.get(
@@ -41,6 +46,7 @@ theatreRouter.patch(
   "/approve-theatre",
   authMiddleware,
   adminMiddleware,
+  validateApproveTheatre,
   approveTheatre,
 );
 

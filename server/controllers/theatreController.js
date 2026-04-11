@@ -4,6 +4,18 @@ import mongoose from "mongoose";
 // add new Theatre
 export const addTheatre = async (req, res, next) => {
   try {
+    const existingTheatre = await Theatre.findOne({
+      name: req.body.name.trim(),
+      owner: req.userId,
+    });
+
+    if (existingTheatre) {
+      return res.status(400).json({
+        success: false,
+        message: "Theatre already exists",
+      });
+    }
+
     await Theatre.create({ ...req.body, owner: req.userId });
     res.status(201).json({
       success: true,
@@ -54,19 +66,21 @@ export const getAllTheatres = async (req, res, next) => {
 export const approveTheatre = async (req, res, next) => {
   try {
     const { theatreId } = req.body;
-    if (!theatreId) {
-      return res.status(400).json({
-        success: false,
-        message: "Theatre ID required",
-      });
-    }
-    await Theatre.findByIdAndUpdate(
+
+    const theatre = await Theatre.findByIdAndUpdate(
       theatreId,
       { isApproved: true },
       {
         new: true, // return updated data
       },
     );
+
+    if (!theatre) {
+      return res.status(404).json({
+        success: false,
+        message: "Theatre not found",
+      });
+    }
 
     res.status(200).json({
       success: true,

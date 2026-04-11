@@ -13,7 +13,7 @@ import {
 } from "antd";
 import { EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { getShowsByTheatre, addShow } from "../api/shows.js";
-import { Form, Input, Modal } from "antd";
+import { Form, Input, Modal, message } from "antd";
 import { getAllMovies } from "../api/movies.js";
 import { useParams } from "react-router-dom";
 const { Title, Text } = Typography;
@@ -26,12 +26,17 @@ function TheatreShows() {
 
   const [open, setOpen] = useState(false);
   const [form] = Form.useForm();
+  const today = new Date().toLocaleDateString("en-CA");
 
   const fetchData = async () => {
     try {
       setLoading(true);
       const res = await getShowsByTheatre(theatreId);
-      setShows(res.data);
+
+      if (res.success) {
+        form.resetFields();
+        setShows(res.data);
+      }
 
       const moviesRes = await getAllMovies();
 
@@ -53,22 +58,34 @@ function TheatreShows() {
   };
 
   const onFinish = async (values) => {
-    await addShow({ ...values, theatre: theatreId });
-    setOpen(false);
-    fetchData();
+    try {
+      const res = await addShow({ ...values, theatre: theatreId });
+
+      if (res.success) {
+        message.success("Show added successfully");
+        setOpen(false);
+        fetchData();
+      } else {
+        message.error(res.message || "Something went wrong");
+      }
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || "Server error";
+
+      message.error(errorMessage);
+    }
   };
 
-const formatTime = (time) => {
-  if (!time) return "";
+  const formatTime = (time) => {
+    if (!time) return "";
 
-  const [hourStr, minute] = time.split(":");
-  let hour = parseInt(hourStr, 10);
+    const [hourStr, minute] = time.split(":");
+    let hour = parseInt(hourStr, 10);
 
-  const ampm = hour >= 12 ? "PM" : "AM";
-  hour = hour % 12 || 12;
+    const ampm = hour >= 12 ? "PM" : "AM";
+    hour = hour % 12 || 12;
 
-  return `${hour}:${minute} ${ampm}`;
-};
+    return `${hour}:${minute} ${ampm}`;
+  };
 
   return (
     <div
@@ -139,9 +156,7 @@ const formatTime = (time) => {
                   {show.movie?.title || "Movie"}
                 </div>
                 <div>Date: {show.date}</div>
-                <div>
-                  Time: {formatTime(show.time)}
-                </div>
+                <div>Time: {formatTime(show.time)}</div>
                 <div>Ticket Price: ₹{show.ticketPrice}</div>
               </div>
             ))}
@@ -171,11 +186,11 @@ const formatTime = (time) => {
           </Form.Item>
 
           <Form.Item
-            label="Date (YYYY-MM-DD)"
+            label="Date"
             name="date"
             rules={[{ required: true, message: "Please enter show date" }]}
           >
-            <Input type="date" placeholder="2026-02-24" />
+            <Input type="date" min={today} />
           </Form.Item>
 
           <Form.Item
