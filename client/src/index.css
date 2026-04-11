@@ -239,14 +239,15 @@ hr {
   padding-inline: 1rem;
 }
 
-/* body {
-  background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-} */
 body {
+  /* background: linear-gradient(135deg, #f5f7fa, #c3cfe2); */
+  background: linear-gradient(135deg, #eef2f3, #dfe9f3);
+}
+/* body {
   /* background: linear-gradient(135deg, #667eea, #764ba2); */
   background: linear-gradient(135deg, #667eea, #764ba2);
   min-height: 100vh;
-}
+} */
 
 .form-container {
   background: rgba(255, 255, 255, 0.15);
@@ -254,22 +255,40 @@ body {
   border-radius: 12px;
   padding: 30px;
 }
-label {
-  color: white !important;
-}
-h1 {
-  color: white !important;
-}
-p {
-  color: white !important;
-}
-a {
-  color: white !important;
-}
 .ant-form-item-label > label {
   color: black !important;
 }
-
+label {
+  color: black !important;
+}
+h1 {
+  color: black !important;
+}
+p {
+  color: black !important;
+}
+a {
+  color: black !important;
+}
+.thrlst {
+  margin-top: 30px;
+}
+.ant-modal-container {
+  background: white !important;
+}
+/* Make validation message more visible */
+.ant-form-item-explain-error {
+  color: red !important;
+  font-size: 15px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+/* .ant-form-item-label > label {
+  color: black !important;
+} */
+.ant-select-content-has-value {
+  padding: 4px;
+  margin-top: 3px;
+}
 h1 {
   font-family: "Poppins", sans-serif;
   text-align: center;
@@ -337,11 +356,13 @@ h1 {
   padding: 0 18px !important;
   font-weight: 600;
   margin-bottom: 10px;
-  background-color: yellow;
+  background-color: white;
   color: black;
   margin-left: 10px;
 }
-
+.ant-table-tbody > tr:hover {
+  background: #f9fafb;
+}
 .admin-movie-list {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 30px;
@@ -415,17 +436,17 @@ h1 {
 
 /* Active tab text color */
 .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
-  color: white !important;
+  color: black !important;
 }
 
 /* Inactive tab text color (optional for consistency) */
 .ant-tabs-tab .ant-tabs-tab-btn {
-  color: #e0e0e0;
+  color: black;
 }
 
 /* Remove blue underline (ink bar) or change color */
 .ant-tabs-ink-bar {
-  background: white !important;
+  background: black !important;
 }
 
 .admin-heading {

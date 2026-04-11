@@ -5,6 +5,8 @@ import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import cors from "cors";
 import movieRouter from "./routes/movieRoutes.js";
+import theatreRouter from "./routes/theatreRoutes.js"
+import showRouter from "./routes/showRoutes.js";
 
 dotenv.config();
 
@@ -28,6 +30,8 @@ app.use(logger);
 
 app.use("/api", userRoute);
 app.use("/api/movies", movieRouter);
+app.use("/api/theatres", theatreRouter);
+app.use("/api/shows", showRouter);
 
 //404 handler
 app.use((req, res) => {
@@ -46,6 +50,16 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(5001, () => {
+app.listen(5002, () => {
   console.log("I am listening"); 
 });
+
+// try {
+//     await connectDB(); 
+
+//     app.listen(5001, () => {
+//       console.log("Server running on port 5000");
+//     });
+//   } catch (error) {
+//     console.log("Server start failed"); 
+//   }

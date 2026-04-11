@@ -6,6 +6,9 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Admin from "./pages/Admin";
 import Navbar from "./components/Navbar";
 import "./components/Navbar.css";
+import Partner from "./pages/Partner";
+import User from "./pages/User";
+import TheatreShows from "./pages/TheatreShows";
 
 function App() {
   return (
@@ -30,7 +33,30 @@ function App() {
             </ProtectedRoute>
           }
         />
-        
+        <Route
+          path="/partner"
+          element={
+            <ProtectedRoute>
+              <Partner />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/partner/theatres/:theatreId/shows"
+          element={
+            <ProtectedRoute>
+              <TheatreShows />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/user"
+          element={
+            <ProtectedRoute>
+              <User />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

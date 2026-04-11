@@ -57,7 +57,7 @@ function TheatersTable() {
     {
       title: "Status",
       render: (_, record) =>
-        record.isActive ? (
+        record.isApproved ? (
           <Tag color="green">Approved</Tag>
         ) : (
           <Tag color="yellow">Pending</Tag>
@@ -67,18 +67,22 @@ function TheatersTable() {
     {
       title: "Action",
       render: (_, record) =>
-        !record.isActive && (
-          <Button
-            icon={<CheckOutlined />}
-            onClick={() => handleApprove(record._id)}
-          ></Button>
+        !record.isApproved ? (
+          <Tooltip title="Approve Theatre">
+            <Button
+              icon={<CheckOutlined />}
+              onClick={() => handleApprove(record._id)}
+            />
+          </Tooltip>
+        ) : (
+          <span>Already Approved</span>
         ),
     },
   ];
 
   return (
     <div className=" p-4">
-      <p>Theatre list</p>
+      <h1 className="admin-movie-list">Admin - Theatre List</h1>
 
       <Table dataSource={theatres} loading={loading} columns={tableColumns} />
     </div>

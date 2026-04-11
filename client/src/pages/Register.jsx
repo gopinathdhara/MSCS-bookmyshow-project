@@ -2,7 +2,9 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { message } from "antd";
 
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, Select } from "antd";
+const { Option } = Select;
+
 import { registerUser } from "../api/users";
 
 function Register() {
@@ -69,6 +71,17 @@ function Register() {
                 id="password"
                 placeholder="Enter your password"
               ></Input>
+            </Form.Item>
+
+            <Form.Item
+              label="Role"
+              name="role"
+              rules={[{ required: true, message: "Please select role" }]}
+            >
+              <Select >
+                <Option value="user">User</Option>
+                <Option value="partner">Partner</Option>
+              </Select>
             </Form.Item>
 
             <Form.Item className="d-block">

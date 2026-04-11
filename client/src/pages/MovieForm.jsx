@@ -21,9 +21,15 @@ const MovieForm = ({
 
   const onFinish = async (values) => {
     console.log(values);
-    selectedMovie
-      ? await updateMovie({ values, movieId: selectedMovie._id })
-      : await addMovie(values);
+
+    if (selectedMovie) {
+      let res = await updateMovie(selectedMovie._id, values);
+      message.success(res.message || "Movie updated successfully");
+    } else {
+      let res = await addMovie(values);
+      message.success(res.message || "Movie added successfully");
+    }
+
     setOpen(false);
     setSelectedMovie(null);
     onSuccess();
@@ -39,7 +45,9 @@ const MovieForm = ({
         duration: selectedMovie.duration,
         genre: selectedMovie.genre,
         language: selectedMovie.language,
-        releaseDate: selectedMovie.releaseDate,
+        releaseDate: selectedMovie.releaseDate
+          ? selectedMovie.releaseDate.split("T")[0]
+          : "",
       });
     } else {
       form.resetFields();
@@ -85,7 +93,7 @@ const MovieForm = ({
             name="duration"
             rules={[{ required: true }]}
           >
-            <Input type="number" />
+            <Input type="number" onWheel={(e) => e.target.blur()} />
           </Form.Item>
 
           <Form.Item label="Genre" name="genre" rules={[{ required: true }]}>

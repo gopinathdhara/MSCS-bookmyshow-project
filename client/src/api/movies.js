@@ -10,16 +10,17 @@ export const addMovie = async (payload) => {
   return response.data;
 };
 
-export const updateMovie = async ({ values, movieId }) => {
-  console.log(movieId);
+export const updateMovie = async (movieId, payload) => {
   const response = await axiosInstance.put(
-    "/movies/update-movie/" + movieId,
-    values,
+    `/movies/update-movie/${movieId}`,
+    payload,
   );
   return response.data;
 };
 
-export const deleteMovie = async (payload) => {
-  const response = await axiosInstance.post("/movies/delete-movie", payload);
+export const deleteMovie = async (movieId) => {
+  const response = await axiosInstance.delete(
+    `/movies/delete-movie/${movieId}`,
+  );
   return response.data;
 };

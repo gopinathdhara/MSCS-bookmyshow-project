@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { Form, Input, Modal } from "antd";
+import { Form, Input, Modal, message } from "antd";
 import { addTheatre } from "../api/theatres.js";
 
 const TheatreForm = ({ open, setOpen, onSuccess }) => {
@@ -13,9 +13,15 @@ const TheatreForm = ({ open, setOpen, onSuccess }) => {
   };
 
   const onFinish = async (values) => {
-    await addTheatre(values);
-    setOpen(false);
-    onSuccess();
+    try {
+      const res = await addTheatre(values);
+      message.success(res.message || "Theatre added successfully");
+      setOpen(false);
+      form.resetFields();
+      onSuccess();
+    } catch (error) {
+      message.error(error.response?.data?.message || "Something went wrong");
+    }
   };
 
   return (
@@ -42,6 +48,10 @@ const TheatreForm = ({ open, setOpen, onSuccess }) => {
             rules={[{ required: true }]}
           >
             <Input.TextArea rows={2} placeholder="Full address" />
+          </Form.Item>
+
+          <Form.Item label="City Name" name="city" rules={[{ required: true }]}>
+            <Input placeholder="Eg: Kolkata" />
           </Form.Item>
 
           <Form.Item label="Phone" name="phone" rules={[{ required: true }]}>

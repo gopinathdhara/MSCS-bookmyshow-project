@@ -25,6 +25,13 @@ function Navbar() {
             ) : (
               ""
             )}
+            { role == "partner" ? (
+              <>
+                <Link to="/partner">Partner</Link>
+              </>
+            ) : (
+              ""
+            )}
 
             <button onClick={handleLogout} className="logout-btn">
               Logout

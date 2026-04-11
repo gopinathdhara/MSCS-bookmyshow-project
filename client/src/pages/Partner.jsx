@@ -4,11 +4,13 @@ import TheatreForm from "./TheatreForm";
 import { Button, Table, Tag, Popconfirm, Tooltip } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { getMyTheatres } from "../api/theatres.js";
+import { Link, useNavigate } from "react-router-dom";
 
 function Partner() {
   const [theatres, setTheatres] = useState([]);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
 
   const fetchTheatres = async () => {
     try {
@@ -28,27 +30,39 @@ function Partner() {
   const tableColumns = [
     { title: "Name", dataIndex: "name" },
     { title: "Address", dataIndex: "address", ellipsis: true },
+    { title: "City", dataIndex: "city" },
     { title: "Phone", dataIndex: "phone", width: 140 },
     { title: "Email", dataIndex: "email", ellipsis: true },
     {
       title: "Status",
       render: (_, record) =>
-        record.isActive ? (
+        record.isApproved ? (
           <Tag color="green">Approved</Tag>
         ) : (
           <Tag color="yellow">Pending</Tag>
+        ),
+    },
+    {
+      title: "Add Shows",
+      render: (_, record) =>
+        record.isApproved && (
+          <Button
+            onClick={() => navigate(`/partner/theatres/${record._id}/shows`)}
+          >
+            + Shows
+          </Button>
         ),
     },
   ];
 
   return (
     <div className=" p-4">
-      <p>Theatre list</p>
+      <h1 className="thrlst">Partner - Theatre List</h1>
       <Button
         onClick={() => {
           setOpen(true);
         }}
-        type="primary"
+        className="add-movie-btn"
       >
         Add Theatre
       </Button>

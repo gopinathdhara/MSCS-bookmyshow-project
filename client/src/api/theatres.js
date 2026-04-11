@@ -21,7 +21,7 @@ export const getAllTheatres = async () => {
 
 export const approveTheatre = async (payload) => {
   try {
-    const response = await axiosInstance.put(
+    const response = await axiosInstance.patch(
       "/theatres/approve-theatre",
       payload,
     );

@@ -25,7 +25,7 @@ function MovieList() {
   const handleDeleteRecord = async (movie) => {
     try {
       setLoading(true);
-      const res = await deleteMovie({ movieId: movie._id });
+      const res = await deleteMovie(movie._id);
       message.success("Deleted the movie");
       setLoading(false);
       fetchMovies();
@@ -98,14 +98,14 @@ function MovieList() {
   ];
 
   return (
-    <div className=" ">
+    <div className="bg-white rounded-2xl shadow-lg p-5 mt-6">
       <h1 className="admin-movie-list">Admin - Movie List</h1>
       <Button
         onClick={() => {
           setOpen(true);
           setSelectedMovie(null);
         }}
-        type="primary"
+       
         className="add-movie-btn"
       >
         Add Movie
