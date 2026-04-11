@@ -9,20 +9,15 @@ import "./components/Navbar.css";
 import Partner from "./pages/Partner";
 import User from "./pages/User";
 import TheatreShows from "./pages/TheatreShows";
+import MovieDetails from "./pages/MovieDetails";
+import BookShow from "./pages/BookShow";
 
 function App() {
   return (
     <BrowserRouter>
       <Navbar />
       <Routes>
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <Home />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route
@@ -50,10 +45,26 @@ function App() {
           }
         />
         <Route
+          path="/movie/:movieId"
+          element={
+            <ProtectedRoute>
+              <MovieDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/user"
           element={
             <ProtectedRoute>
               <User />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/book-show/:showId"
+          element={
+            <ProtectedRoute>
+              <BookShow />
             </ProtectedRoute>
           }
         />

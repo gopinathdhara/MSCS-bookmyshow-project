@@ -12,12 +12,14 @@ function Navbar() {
 
   return (
     <div className="navbar">
-      <div className="logo">BookMyShow </div>
+     <div className="logo">
+  <Link to="/" className="logo-link">BookMyShow</Link>
+</div>
 
       <div className="nav-links">
         {token ? (
           <>
-            <Link to="/">Home</Link>
+            
             { role == "admin" ? (
               <>
                 <Link to="/admin">Admin</Link>
@@ -39,7 +41,8 @@ function Navbar() {
           </>
         ) : (
           <>
-            <Link to="/login">Login</Link>
+            <Link to="/">Home</Link>
+            <Link to="/login">Login</Link> 
           </>
         )}
       </div>

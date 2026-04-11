@@ -11,7 +11,7 @@ import { adminMiddleware } from "../middlewares/adminMiddleware.js";
 
 const movieRouter = express.Router();
 movieRouter.post("/add-movie", authMiddleware, adminMiddleware, addMovie);
-movieRouter.get("/get-all-movies", authMiddleware, getAllMovies);
+movieRouter.get("/get-all-movies", getAllMovies);
 movieRouter.get("/get-single-movie/:id", authMiddleware, getMovieByID);
 movieRouter.put(
   "/update-movie/:id",

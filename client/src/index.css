@@ -3,7 +3,6 @@
   pointer-events: none;
 }
 .App-header {
-  /* background-color: #f3f8ff; */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -240,14 +239,15 @@ hr {
 }
 
 body {
-  /* background: linear-gradient(135deg, #f5f7fa, #c3cfe2); */
   background: linear-gradient(135deg, #eef2f3, #dfe9f3);
 }
-/* body {
-  /* background: linear-gradient(135deg, #667eea, #764ba2); */
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  min-height: 100vh;
-} */
+
+.logo-link {
+  color: white !important;
+  font-weight: bold;
+  font-size: 20px;
+  text-decoration: none;
+}
 
 .form-container {
   background: rgba(255, 255, 255, 0.15);
@@ -276,15 +276,13 @@ a {
 .ant-modal-container {
   background: white !important;
 }
-/* Make validation message more visible */
+
 .ant-form-item-explain-error {
   color: red !important;
   font-size: 15px;
   font-family: Arial, Helvetica, sans-serif;
 }
-/* .ant-form-item-label > label {
-  color: black !important;
-} */
+
 .ant-select-content-has-value {
   padding: 4px;
   margin-top: 3px;
@@ -434,17 +432,14 @@ h1 {
   margin-left: 10px;
 }
 
-/* Active tab text color */
 .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
   color: black !important;
 }
 
-/* Inactive tab text color (optional for consistency) */
 .ant-tabs-tab .ant-tabs-tab-btn {
   color: black;
 }
 
-/* Remove blue underline (ink bar) or change color */
 .ant-tabs-ink-bar {
   background: black !important;
 }

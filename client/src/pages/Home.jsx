@@ -1,156 +1,96 @@
 import { useEffect, useState } from "react";
-import { getCurrentUser } from "../api/users.js";
-import {
-  Layout,
-  Card,
-  Typography,
-  Row,
-  Col,
-  Avatar,
-  Spin,
-  Alert,
-  Tag,
-  Space,
-  Button
-} from "antd";
-import { UserOutlined, MailOutlined, SafetyOutlined,LogoutOutlined } from "@ant-design/icons";
-
-const { Content } = Layout;
-const { Title, Text } = Typography;
+import { useNavigate } from "react-router-dom";
+import { message } from "antd";
+import { getAllMovies } from "../api/movies";
 
 export default function Home() {
-  const [user, setUser] = useState(null);
-  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const [movies, setMovies] = useState([]);
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    window.location.href = "/login";
+  const fetchMovies = async () => {
+    try {
+      const res = await getAllMovies();
+      if (res.success) setMovies(res.data);
+      else message.error(res.message);
+    } catch (error) {
+      message.error(error.message);
+    }
   };
 
   useEffect(() => {
-    const fetchMe = async () => {
-      try {
-        const data = await getCurrentUser();
-        setUser(data?.data?.userDetails);
-      } catch (err) {
-        setError("Failed to load profile");
-      }
-    };
-
-    fetchMe();
+    fetchMovies();
   }, []);
 
-  if (error) {
-    return (
-      <Layout style={{ minHeight: "100vh", background: "#f5f7fa" }}>
-        <Content
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: 24,
-          }}
-        >
-          <Alert
-            message="Error"
-            description={error}
-            type="error"
-            showIcon
-            style={{ width: "100%", maxWidth: 500 }}
-          />
-        </Content>
-      </Layout>
-    );
-  }
-
-  if (!user) {
-    return (
-      <Layout style={{ minHeight: "100vh", background: "#f5f7fa" }}>
-        <Content
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Spin size="large" />
-        </Content>
-      </Layout>
-    );
-  }
-
   return (
-    <Layout
-      style={{
-        minHeight: "100vh"
-       
-      }}
-    >
-      <Content style={{ padding: "40px 20px" }}>
-        <Row justify="center">
-          <Col xs={24} sm={20} md={16} lg={12} xl={10}>
-            <Card
-              bordered={false}
+    <div style={{ marginTop: "20px",marginLeft:"20px" }}>
+      <h2 style={{ marginBottom: 12 }}>Now Showing</h2>
+
+      {movies.length === 0 ? (
+        <p>No movies available.</p>
+      ) : (
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
+            gap: 16,
+          }}
+        >
+          {movies.map((movie) => (
+            <div
+              key={movie._id}
+              onClick={() => navigate(`/movie/${movie._id}`)}
               style={{
-                borderRadius: 12,
-                boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+                border: "1px solid #e5e7eb",
+                borderRadius: 10,
+                overflow: "hidden",
+                cursor: "pointer",
+                background: "white",
               }}
             >
-              <div style={{ textAlign: "right", marginBottom: 12 }}>
-                <Button danger icon={<LogoutOutlined />} onClick={handleLogout}>
-                  Logout
-                </Button>
-              </div>
-              <div style={{ textAlign: "center", marginBottom: 24 }}>
-                <Avatar
-                  size={72}
-                  icon={<UserOutlined />}
-                  style={{ backgroundColor: "#1677ff", marginBottom: 12 }}
-                />
-                <Title level={3} style={{ margin: 0 }}>
-                  Welcome
-                </Title>
-                <Text type="secondary">Profile information</Text>
-              </div>
-
-              <Space
-                direction="vertical"
-                size="large"
-                style={{ width: "100%" }}
+              <div
+                style={{
+                  height: 140,
+                  background: "#f3f4f6",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontWeight: 600,
+                }}
               >
-                <div>
-                  <Text strong>
-                    <UserOutlined style={{ marginRight: 8 }} />
-                    Name
-                  </Text>
-                  <br />
-                  <Text>{user.name}</Text>
+                <img
+                  src={movie.posterUrl}
+                  alt={movie.title}
+                  loading="lazy"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    display: "block",
+                  }}
+                  onError={(e) => {
+                    e.currentTarget.src =
+                      "https://via.placeholder.com/400x600?text=No+Poster";
+                  }}
+                />{" "}
+              </div>
+
+              <div style={{ padding: 12 }}>
+                <div style={{ fontWeight: 700, marginBottom: 6 }}>
+                  {movie.title}
                 </div>
 
-                <div>
-                  <Text strong>
-                    <MailOutlined style={{ marginRight: 8 }} />
-                    Email
-                  </Text>
-                  <br />
-                  <Text>{user.email}</Text>
+                <div style={{ opacity: 0.8, fontSize: 13 }}>
+                  {movie.genre} • {movie.language}
                 </div>
 
-                <div>
-                  <Text strong>
-                    <SafetyOutlined style={{ marginRight: 8 }} />
-                    Role
-                  </Text>
-                  <br />
-                  <Tag color={user.role === "admin" ? "red" : "blue"}>
-                    {user.role}
-                  </Tag>
+                <div style={{ opacity: 0.8, fontSize: 13, marginTop: 4 }}>
+                  {movie.duration} mins
                 </div>
-              </Space>
-            </Card>
-          </Col>
-        </Row>
-      </Content>
-    </Layout>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }

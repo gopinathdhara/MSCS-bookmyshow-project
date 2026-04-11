@@ -1,25 +1,29 @@
 import React from "react";
 
 import { Button, Form, Input } from "antd";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { loginUser } from "../api/users";
 import { message } from "antd";
 
 function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const onFinish = async (values) => {
     try {
       const res = await loginUser(values);
       const token = res.data?.token;
       const role = res.data?.role;
-      
+
       localStorage.setItem("token", token);
       localStorage.setItem("role", role);
 
       message.success("Login successful");
       setTimeout(() => {
-        navigate("/");
+        //navigate("/");
+        const from = location.state?.from?.pathname || "/";
+
+        navigate(from, { replace: true });
       }, 1000);
     } catch (err) {
       message.error("Login failed");
