@@ -60,6 +60,30 @@ export const getMovieByID = async (req, res, next) => {
   }
 };
 
+// all featured movie list
+
+export const getAllFeaturedMovies = async (req, res, next) => {
+  try {
+    let movies = await movie.find({ isFeatured: true }).sort({ createdAt: -1 });
+
+    if (movies.length === 0) {
+      return res.status(200).json({
+        success: true,
+        message: "No featured movies found",
+        data: [],
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "Featured movies fetched successfully",
+      data: movies,
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
 // update movie
 export const updateMovie = async (req, res, next) => {
   try {

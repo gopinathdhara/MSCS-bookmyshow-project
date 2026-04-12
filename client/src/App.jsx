@@ -11,64 +11,71 @@ import User from "./pages/User";
 import TheatreShows from "./pages/TheatreShows";
 import MovieDetails from "./pages/MovieDetails";
 import BookShow from "./pages/BookShow";
+import Footer from "./components/Footer";
 
 function App() {
   return (
     <BrowserRouter>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute>
-              <Admin />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/partner"
-          element={
-            <ProtectedRoute>
-              <Partner />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/partner/theatres/:theatreId/shows"
-          element={
-            <ProtectedRoute>
-              <TheatreShows />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/movie/:movieId"
-          element={
-            <ProtectedRoute>
-              <MovieDetails />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/user"
-          element={
-            <ProtectedRoute>
-              <User />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/book-show/:showId"
-          element={
-            <ProtectedRoute>
-              <BookShow />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
+      <div className="app-container">
+        <Navbar />
+        <div className="page-content">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute>
+                  <Admin />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/partner"
+              element={
+                <ProtectedRoute>
+                  <Partner />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/partner/theatres/:theatreId/shows"
+              element={
+                <ProtectedRoute>
+                  <TheatreShows />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/movie/:movieId"
+              element={
+                <ProtectedRoute>
+                  <MovieDetails />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/user"
+              element={
+                <ProtectedRoute>
+                  <User />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/book-show/:showId"
+              element={
+                <ProtectedRoute>
+                  <BookShow />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </div>
+
+        <Footer />
+      </div>
     </BrowserRouter>
   );
 }

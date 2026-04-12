@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button, message } from "antd";
 import { getShowsByMovie } from "../api/shows";
+import { getMovieDetails } from "../api/movies";
 
 export default function MovieDetails() {
   const { movieId } = useParams();
@@ -16,6 +17,7 @@ export default function MovieDetails() {
   };
 
   const [shows, setShows] = useState([]);
+  const [movie, setMovie] = useState([]);
   const [date, setDate] = useState(getTodayYYYYMMDD());
 
   const fetchShows = async (selectedDate) => {
@@ -23,6 +25,19 @@ export default function MovieDetails() {
       const res = await getShowsByMovie(movieId, selectedDate);
       if (res.success) {
         setShows(res.data);
+      } else {
+        message.error(res.message);
+      }
+    } catch (error) {
+      message.error(error.message);
+    }
+  };
+
+  const getSingleMovie = async (movieId) => {
+    try {
+      const res = await getMovieDetails(movieId);
+      if (res.success) {
+        setMovie(res.data);
       } else {
         message.error(res.message);
       }
@@ -40,6 +55,10 @@ export default function MovieDetails() {
   useEffect(() => {
     fetchShows(date);
   }, [date]);
+
+  useEffect(() => {
+    getSingleMovie(movieId);
+  }, [movieId]);
 
   //[
   //   { theatreId: PVR, time: "10AM" },
@@ -67,8 +86,32 @@ export default function MovieDetails() {
   }, [shows]);
 
   return (
-    <div style={{ marginTop: "20px",marginLeft:"20px" }}>
-      <h2 style={{ marginBottom: 12 }}>Select Date</h2>
+    <div style={{ marginTop: "20px", marginLeft: "20px" }}>
+      <div style={{ marginBottom: "20px" }}>
+        <h2
+          style={{
+            color: "#111827",
+            fontSize: "26px",
+            fontWeight: "700",
+            marginBottom: "5px",
+            letterSpacing: "0.5px",
+          }}
+        >
+          🎬 {movie.title}
+        </h2>
+
+        <p
+          style={{
+            color: "#6b7280",
+            fontSize: "14px",
+            marginTop:"20px"
+          }}
+        >
+          {movie.language} • {movie.genre} • {movie.duration} mins
+        </p>
+      </div>
+      
+      <h3 style={{ marginBottom: 12 }}>Select Date</h3>
 
       <div style={{ marginBottom: 24 }}>
         <input
@@ -87,7 +130,7 @@ export default function MovieDetails() {
       {groupedByTheatre.length === 0 ? (
         <p>No shows found for this movie on this date.</p>
       ) : (
-        <div style={{ display: "grid", gap: 16 }}>
+        <div style={{ display: "grid", gap: 16 }} className="show-card">
           {groupedByTheatre.map((group) => (
             <div
               key={group.theatre._id}
@@ -97,10 +140,10 @@ export default function MovieDetails() {
                 padding: 16,
               }}
             >
-              <div style={{ fontWeight: 600, fontSize: 16 }}>
+              <div style={{ fontWeight: 600, fontSize: 16 }} className="theatre-name">
                 {group.theatre.name}
               </div>
-              <div style={{ opacity: 0.85 }}>{group.theatre.address}</div>
+              <div style={{ opacity: 0.85 }} className="theatre-address">{group.theatre.address}</div>
 
               <div
                 style={{
@@ -108,7 +151,7 @@ export default function MovieDetails() {
                   display: "flex",
                   gap: 10,
                   flexWrap: "wrap",
-                }}
+                }} className="show-time-list"
               >
                 {group.shows.map((show) => (
                   <Button

@@ -20,11 +20,22 @@ function Login() {
 
       message.success("Login successful");
       setTimeout(() => {
-        //navigate("/");
-        const from = location.state?.from?.pathname || "/";
+      const from = location.state?.from?.pathname;
 
+      if (from) {
+        // if user came from protected route
         navigate(from, { replace: true });
-      }, 1000);
+      } else {
+        // role-based redirect
+        if (role === "admin") {
+          navigate("/admin");
+        } else if (role === "partner") {
+          navigate("/partner");
+        } else {
+          navigate("/");
+        }
+      }
+    }, 1000);
     } catch (err) {
       message.error("Login failed");
       console.log("Error", err.message);

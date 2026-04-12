@@ -5,6 +5,11 @@ export const getAllMovies = async () => {
   return response.data;
 };
 
+export const getFeaturedMovies = async () => {
+  const response = await axiosInstance.get("/movies/get-featured-movies");
+  return response.data;
+};
+
 export const addMovie = async (payload) => {
   const response = await axiosInstance.post("/movies/add-movie", payload);
   return response.data;
@@ -22,5 +27,10 @@ export const deleteMovie = async (movieId) => {
   const response = await axiosInstance.delete(
     `/movies/delete-movie/${movieId}`,
   );
+  return response.data;
+};
+
+export const getMovieDetails = async (movieId) => {
+  const response = await axiosInstance.get(`/movies/get-single-movie/${movieId}`);
   return response.data;
 };

@@ -68,6 +68,11 @@ function MovieList() {
       title: "Language",
       dataIndex: "language",
     },
+    {
+      title: "Featured",
+      dataIndex: "isFeatured",
+      render: (isFeatured) => (isFeatured ? "⭐ Featured" : "—"),
+    },
 
     {
       title: "Actions",
@@ -105,7 +110,6 @@ function MovieList() {
           setOpen(true);
           setSelectedMovie(null);
         }}
-       
         className="add-movie-btn"
       >
         Add Movie

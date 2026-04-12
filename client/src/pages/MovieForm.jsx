@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { Form, Input, Modal, message } from "antd";
+import { Form, Input, Modal, message, Switch } from "antd";
 import { addMovie, updateMovie } from "../api/movies";
 import { useEffect } from "react";
 
@@ -29,7 +29,7 @@ const MovieForm = ({
       let res = await addMovie(values);
       message.success(res.message || "Movie added successfully");
     }
-
+    form.resetFields();
     setOpen(false);
     setSelectedMovie(null);
     onSuccess();
@@ -48,6 +48,7 @@ const MovieForm = ({
         releaseDate: selectedMovie.releaseDate
           ? selectedMovie.releaseDate.split("T")[0]
           : "",
+        isFeatured: selectedMovie.isFeatured,
       });
     } else {
       form.resetFields();
@@ -107,6 +108,19 @@ const MovieForm = ({
           >
             <Input />
           </Form.Item>
+
+          <Form.Item
+  label="Featured Movie"
+  name="isFeatured"
+  valuePropName="checked"
+  extra="Featured movies can be highlighted on the homepage."
+>
+  <Switch
+    className="featured-switch"
+    checkedChildren="★"
+    unCheckedChildren="☆"
+  />
+</Form.Item>
 
           <Form.Item
             label="Release Date"
