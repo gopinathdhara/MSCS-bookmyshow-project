@@ -1,7 +1,7 @@
 import axiosInstance from "./index.js";
 
 export const makePayment = async (token, amount) => {
-  const response = await axiosInstance.post("/bookings/make-payment", {
+  const response = await axiosInstance.post("/payment/make-payment", {
     token,
     amount,
   });
@@ -9,7 +9,7 @@ export const makePayment = async (token, amount) => {
 };
 
 export const bookShow = async (payload) => {
-  const response = await axiosInstance.post("/bookings/book-show", payload);
+  const response = await axiosInstance.post("/payment/book-show", payload);
   return response.data;
 };
 

@@ -14,6 +14,7 @@ export default function BookShow() {
   const [totalSeats, setTotalSeats] = useState(1);
 
   const navigate = useNavigate();
+  const stripeKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
 
   const getData = async () => {
     try {
@@ -48,6 +49,12 @@ export default function BookShow() {
   }, []);
 
   const getSeats = () => {
+    //Used Set (Hashing) to achieve O(1) seat lookup for fast and efficient booking system
+    // In the seat booking module, we used the Set data structure to efficiently check booked seats and determine seat availability.
+
+    const selectedSeatsSet = new Set(selectedSeats);
+    const bookedSeatsSet = new Set(show?.bookedSeats || []);
+
     return (
       <div className="d-flex flex-column align-items-center">
         <div className="w-100 max-width-600 mx-auto mb-25px">
@@ -89,11 +96,18 @@ export default function BookShow() {
                     let seatNumber = row * columns + column + 1; // 0*4+0+1=1 , 0*4+1+1=2, 1*4+0+1=5
                     let seatClass = "seat-btn";
 
-                    if (selectedSeats.includes(seatNumber)) {
+                    // if (selectedSeats.includes(seatNumber)) {
+                    //   seatClass += " selected";
+                    // }
+
+                    // if (show?.bookedSeats?.includes(seatNumber)) {
+                    //   seatClass += " booked";
+                    // }
+
+                    if (selectedSeatsSet.has(seatNumber)) {
                       seatClass += " selected";
                     }
-
-                    if (show?.bookedSeats?.includes(seatNumber)) {
+                    if (bookedSeatsSet.has(seatNumber)) {
                       seatClass += " booked";
                     }
 
@@ -102,7 +116,7 @@ export default function BookShow() {
                         <button
                           key={seatNumber}
                           onClick={() => {
-                            if (selectedSeats.includes(seatNumber)) {
+                            if (selectedSeatsSet.has(seatNumber)) {
                               setSelectedSeats(
                                 selectedSeats.filter(
                                   (curSeatNumber) =>
@@ -114,6 +128,7 @@ export default function BookShow() {
                             }
                           }}
                           className={seatClass}
+                          disabled={bookedSeatsSet.has(seatNumber)}
                         >
                           {seatNumber}
                         </button>
@@ -145,6 +160,8 @@ export default function BookShow() {
   };
 
   const onToken = async (token) => {
+    console.log("token");
+    console.log(token);
     try {
       const response = await makePayment(
         token,
@@ -152,6 +169,7 @@ export default function BookShow() {
       );
       if (response.success) {
         book(response.data);
+        console.log(response.data);
       }
     } catch (err) {
       message.error(err.message);
@@ -163,7 +181,7 @@ export default function BookShow() {
       seats: selectedSeats,
       transactionId,
       show: showId,
-      user: localStorage.getItem("userId"),
+      totalAmount: selectedSeats.length * show.ticketPrice,
     });
     if (response.success) {
       navigate("/");
@@ -198,10 +216,24 @@ export default function BookShow() {
             <div className="show-name py-3">
               {/* Show name */}
               <h3>
-                <div>Shows Date: {show.date}</div>{" "}
+                <div>
+                  Shows Date:{" "}
+                  {new Date(show.date).toLocaleDateString("en-IN", {
+                    weekday: "long",
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </div>{" "}
                 <div>Shows Time: {formatTime(show.time)}</div>
               </h3>
-              <h3>Ticket Price: ₹ {show.ticketPrice}</h3>
+              <h3>
+                Ticket Price:  &nbsp;
+                 {new Intl.NumberFormat("en-IN", {
+                  style: "currency",
+                  currency: "INR",
+                }).format(show.ticketPrice)}
+              </h3>
             </div>
           }
         >
@@ -211,8 +243,9 @@ export default function BookShow() {
             <StripeCheckout.default
               token={onToken}
               billingAddress
-              amount={selectedSeats.length * show.ticketPrice}
-              stripeKey="xxxxxx"
+              amount={selectedSeats.length * show.ticketPrice * 100}
+              currency="INR"
+              stripeKey={stripeKey}
             >
               <div className="max-width-600 mx-auto">
                 <Button type="primary" shape="round" size="large" block>
