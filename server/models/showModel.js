@@ -25,7 +25,7 @@ const showSchema = new mongoose.Schema(
       required: true,
     },
     bookedSeats: {
-      type: [String],
+      type: [Number],
       default: [],
     },
   },

@@ -40,6 +40,19 @@ const theatreSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    
+    // seat layout
+    rows: {
+      type: Number,
+      required: true,
+      min: 1,
+    },
+
+    columns: {
+      type: Number,
+      required: true,
+      min: 1,
+    },
   },
   { timestamps: true },
 );

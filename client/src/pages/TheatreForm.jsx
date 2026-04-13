@@ -65,6 +65,42 @@ const TheatreForm = ({ open, setOpen, onSuccess }) => {
           >
             <Input placeholder="Eg: manager@theatre.com" />
           </Form.Item>
+
+          <Form.Item
+            label="Rows"
+            name="rows"
+            rules={[
+              { required: true, message: "Please enter number of rows" },
+              {
+                validator: (_, value) => {
+                  if (value === undefined || value === null || value < 1) {
+                    return Promise.reject("Rows must be at least 1");
+                  }
+                  return Promise.resolve();
+                },
+              },
+            ]}
+          >
+            <Input type="number" placeholder="Eg: 5" min={1} />
+          </Form.Item>
+
+          <Form.Item
+            label="Columns"
+            name="columns"
+            rules={[
+              { required: true, message: "Please enter number of columns" },
+              {
+                validator: (_, value) => {
+                  if (value === undefined || value === null || value < 1) {
+                    return Promise.reject("Columns must be at least 1");
+                  }
+                  return Promise.resolve();
+                },
+              },
+            ]}
+          >
+            <Input type="number" placeholder="Eg: 10" min={1} />
+          </Form.Item>
         </Form>
       </Modal>
     </>

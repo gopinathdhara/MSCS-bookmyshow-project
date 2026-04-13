@@ -18,3 +18,8 @@ export const getShowsByMovie = async (movieId, date) => {
   );
   return response.data;
 };
+
+export const getShowById = async (showId) => {
+  const response = await axiosInstance.get(`/shows/get-by-id?showId=${showId}`);
+  return response.data;
+};

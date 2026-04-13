@@ -118,3 +118,31 @@ export const getShowsByMovie = async (req, res, next) => {
     next(error);
   }
 };
+
+// get show details for seat booking
+export const getShowsById = async (req, res, next) => {
+  const { showId } = req.query;
+
+  try {
+    const shows = await Show.findById(showId)
+      .populate("movie")
+      .populate("theatre");
+
+    if (!shows) {
+      return res.status(404).send({
+        success: false,
+        message: "Shows not found",
+        data: null,
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Shows fetched successfully",
+      data: shows,
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};

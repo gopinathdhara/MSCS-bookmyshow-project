@@ -119,3 +119,28 @@ export const validateGetShowsByMovie = (req, res, next) => {
     next(error);
   }
 };
+
+// check showId for seat booking
+export const validateGetShowById = (req, res, next) => {
+  try {
+    const { showId } = req.query;
+
+    if (!showId) {
+      return res.status(400).json({
+        success: false,
+        message: "showId is required",
+      });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(showId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid showId",
+      });
+    }
+
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
