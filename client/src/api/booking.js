@@ -9,7 +9,7 @@ export const makePayment = async (token, amount) => {
 };
 
 export const bookShow = async (payload) => {
-  const response = await axiosInstance.post("/payment/book-show", payload);
+  const response = await axiosInstance.post("/booking/book-show", payload);
   return response.data;
 };
 

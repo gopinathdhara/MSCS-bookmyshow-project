@@ -204,12 +204,13 @@ hr {
   background-color: #02a802 !important;
   color: #fff !important;
 }
-.seat-ul .seat-btn.booked {
+.seat-btn.booked {
   background-color: #ddd;
   color: #999;
   border-color: #ddd;
   cursor: not-allowed;
 }
+
 .screen-div {
   max-width: 75%;
   margin-inline: auto;

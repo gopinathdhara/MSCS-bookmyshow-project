@@ -1,6 +1,5 @@
 import express from "express";
 import Stripe from "stripe";
-import Booking from "../models/bookShow.js";
 
 export const makePayment = async (req, res, next) => {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -27,19 +26,6 @@ export const makePayment = async (req, res, next) => {
       message:
         "Payment processing. You will receive a confirmation once the payment is complete",
       data: transactionId,
-    });
-  } catch (error) {
-    console.log(error);
-    next(error);
-  }
-};
-
-export const bookShow = async (req, res, next) => {
-  try {
-    await Booking.create({ ...req.body, user: req.userId });
-    res.status(201).json({
-      success: true,
-      message: "New Booking completed successfully",
     });
   } catch (error) {
     console.log(error);
