@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -12,24 +12,60 @@ function Navbar() {
 
   return (
     <div className="navbar">
-     <div className="logo">
-  <Link to="/" className="logo-link">BookMyShow</Link>
-</div>
+      <div className="logo">
+        <Link to="/" className="logo-link">
+          BookMyShow
+        </Link>
+      </div>
 
       <div className="nav-links">
         {token ? (
           <>
-            
-            { role == "admin" ? (
+            {role == "admin" ? (
               <>
-                <Link to="/admin">Admin</Link>
+                <NavLink
+                  to="/admin"
+                  className={({ isActive }) => (isActive ? "nav-active" : "")}
+                  end
+                >
+                  Movies & Theatres
+                </NavLink>
+                <NavLink
+                  to="/allbookings"
+                  className={({ isActive }) => (isActive ? "nav-active" : "")}
+                >
+                  All bookings
+                </NavLink>
               </>
             ) : (
               ""
             )}
-            { role == "partner" ? (
+            {role == "partner" ? (
               <>
-                <Link to="/partner">Partner</Link>
+                <NavLink
+                  to="/partner"
+                  className={({ isActive }) => (isActive ? "nav-active" : "")}
+                >
+                  Theatre & Shows
+                </NavLink>
+                <NavLink
+                  to="/partner-bookings"
+                  className={({ isActive }) => (isActive ? "nav-active" : "")}
+                >
+                  Bookings
+                </NavLink>
+              </>
+            ) : (
+              ""
+            )}
+            {role == "user" ? (
+              <>
+                <NavLink
+                  to="/mybookings"
+                  className={({ isActive }) => (isActive ? "nav-active" : "")}
+                >
+                  My Bookings
+                </NavLink>
               </>
             ) : (
               ""
@@ -41,8 +77,18 @@ function Navbar() {
           </>
         ) : (
           <>
-            <Link to="/">Home</Link>
-            <Link to="/login">Login</Link> 
+            <NavLink
+              to="/"
+              className={({ isActive }) => (isActive ? "nav-active" : "")}
+            >
+              Home
+            </NavLink>
+            <NavLink
+              to="/login"
+              className={({ isActive }) => (isActive ? "nav-active" : "")}
+            >
+              Login
+            </NavLink>
           </>
         )}
       </div>

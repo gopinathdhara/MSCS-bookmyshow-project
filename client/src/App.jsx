@@ -11,7 +11,10 @@ import User from "./pages/User";
 import TheatreShows from "./pages/TheatreShows";
 import MovieDetails from "./pages/MovieDetails";
 import BookShow from "./pages/BookShow";
-import Footer from "./components/Footer";
+import MyBookings from "./pages/MyBookings";
+import Footer from "./components/Footer"; 
+import AdminBookings from "./pages/AdminBookings";
+import PartnerBookings from "./pages/PartnerBookings";
 
 function App() {
   return (
@@ -71,7 +74,32 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/mybookings"
+              element={
+                <ProtectedRoute>
+                  <MyBookings />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/allbookings"
+              element={
+                <ProtectedRoute>
+                  <AdminBookings />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/partner-bookings"
+              element={
+                <ProtectedRoute>
+                  <PartnerBookings />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
+          
         </div>
 
         <Footer />

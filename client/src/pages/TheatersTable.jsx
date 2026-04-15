@@ -82,9 +82,15 @@ function TheatersTable() {
 
   return (
     <div className=" p-4">
-      <h1 className="admin-movie-list">Admin - Theatre List</h1>
+      <h1 className="admin-movie-list"> Manage Theatres</h1>
 
-      <Table dataSource={theatres} loading={loading} columns={tableColumns} />
+      <Table
+        dataSource={theatres}
+        loading={loading}
+        columns={tableColumns}
+        bordered
+        pagination={{ pageSize: 5 }}
+      />
     </div>
   );
 }

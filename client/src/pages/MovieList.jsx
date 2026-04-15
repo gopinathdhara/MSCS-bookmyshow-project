@@ -104,7 +104,7 @@ function MovieList() {
 
   return (
     <div className="bg-white rounded-2xl shadow-lg p-5 mt-6">
-      <h1 className="admin-movie-list">Admin - Movie List</h1>
+      <h1 className="admin-movie-list">Manage Movies</h1>
       <Button
         onClick={() => {
           setOpen(true);
@@ -114,7 +114,7 @@ function MovieList() {
       >
         Add Movie
       </Button>
-      <Table dataSource={movies} loading={loading} columns={tableColumns} />
+      <Table  rowKey="_id" dataSource={movies} loading={loading} columns={tableColumns} bordered pagination={{ pageSize: 5 }}/>
       <MovieForm
         open={open}
         setOpen={setOpen}

@@ -86,7 +86,7 @@ const MovieForm = ({
             name="description"
             rules={[{ required: true }]}
           >
-            <Input.TextArea rows={3} />
+            <Input.TextArea rows={2} />
           </Form.Item>
 
           <Form.Item

@@ -15,9 +15,25 @@ export const bookShow = async (payload) => {
 
 export const getAllBookings = async (payload) => {
   try {
-    const response = await axiosInstance.get(
-      `/bookings/get-all-bookings/${payload.userId}`,
-    );
+    const response = await axiosInstance.get(`/booking/get-all-bookings`);
+    return response.data;
+  } catch (err) {
+    return err.response;
+  }
+};
+
+export const getMyBookings = async () => {
+  try {
+    const response = await axiosInstance.get(`/booking/get-my-bookings`);
+    return response.data;
+  } catch (err) {
+    return err.response;
+  }
+};
+
+export const getPartnerBooking = async () => {
+  try {
+    const response = await axiosInstance.get(`/booking/get-partner-bookings`);
     return response.data;
   } catch (err) {
     return err.response;

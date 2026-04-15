@@ -184,7 +184,7 @@ export default function BookShow() {
       totalAmount: selectedSeats.length * show.ticketPrice,
     });
     if (response.success) {
-      navigate("/");
+      navigate("/mybookings");
     }
   };
 
@@ -228,8 +228,8 @@ export default function BookShow() {
                 <div>Shows Time: {formatTime(show.time)}</div>
               </h3>
               <h3>
-                Ticket Price:  &nbsp;
-                 {new Intl.NumberFormat("en-IN", {
+                Ticket Price: &nbsp;
+                {new Intl.NumberFormat("en-IN", {
                   style: "currency",
                   currency: "INR",
                 }).format(show.ticketPrice)}

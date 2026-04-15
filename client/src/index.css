@@ -250,11 +250,107 @@ body {
   text-decoration: none;
 }
 
+.my-bookings-empty {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.my-bookings-title {
+  font-size: 56px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.my-bookings-text {
+  font-size: 26px;
+  font-weight: 500;
+  color: #111111;
+}
+
+.my-bookings-btn {
+  background-color: #dc2626;
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 600;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.my-bookings-btn:hover {
+  background-color: #b91c1c;
+  transform: scale(1.05);
+}
+
 .form-container {
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(10px);
   border-radius: 12px;
   padding: 30px;
+}
+.booking-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.booking-card {
+  display: flex;
+  gap: 14px;
+  background: #ffffff;
+  padding: 14px;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  transition: 0.3s;
+}
+
+.booking-card:hover {
+  transform: translateY(-4px);
+}
+
+.booking-poster {
+  width: 80px;
+  height: 120px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.booking-details {
+  flex: 1;
+}
+
+.movie-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.booking-details p {
+  font-size: 13px;
+  margin: 3px 0;
+  color: #374151;
+}
+
+.booking-id {
+  font-size: 11px;
+  color: #6b7280;
+  overflow-wrap: anywhere;
+}
+.nav-active {
+  color: #ffffff;
+  font-weight: 600;
+  border-bottom: 2px solid #ef4444;
+  padding-bottom: 2px;
 }
 .ant-form-item-label > label {
   color: black !important;
@@ -518,8 +614,8 @@ h1 {
   justify-content: center;
   gap: 15px;
   width: 100%;
-  max-width: 500px;  
-  margin: 0 auto;   
+  max-width: 500px;
+  margin: 0 auto;
 }
 .seat-container {
   display: flex;

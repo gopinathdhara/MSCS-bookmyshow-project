@@ -57,7 +57,7 @@ function Partner() {
 
   return (
     <div className=" p-4">
-      <h1 className="thrlst">Partner - Theatre List</h1>
+      <h1 className="thrlst"> Theatre Lists</h1>
       <Button
         onClick={() => {
           setOpen(true);
@@ -66,7 +66,8 @@ function Partner() {
       >
         Add Theatre
       </Button>
-      <Table dataSource={theatres} loading={loading} columns={tableColumns} />
+      <Table dataSource={theatres} loading={loading} columns={tableColumns} bordered
+        pagination={{ pageSize: 5 }} />
       <TheatreForm open={open} setOpen={setOpen} onSuccess={fetchTheatres} />
     </div>
   );
