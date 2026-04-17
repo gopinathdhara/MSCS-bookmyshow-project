@@ -28,7 +28,7 @@ const Bookings = () => {
 
   return (
     <>
-      <h1 className="admin-movie-list">My Bookings</h1>
+      <h1 className="my-movie-list">My Bookings</h1>
       {bookings && (
         <div className="booking-container">
         <Row gutter={24} >

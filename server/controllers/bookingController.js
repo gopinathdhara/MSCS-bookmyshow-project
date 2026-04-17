@@ -1,6 +1,7 @@
 import express from "express";
 import Booking from "../models/bookShow.js";
 import Show from "../models/showModel.js";
+import EmailHelper from "../utils/emailHelper.js";
 
 export const bookShow = async (req, res, next) => {
   try {
@@ -39,6 +40,53 @@ export const bookShow = async (req, res, next) => {
     await Show.findByIdAndUpdate(req.body.show, {
       bookedSeats: updatedBookedSeats,
     });
+
+    const populatedBooking = await Booking.findById(newBooking._id)
+      .populate("user")
+      .populate("show")
+      .populate({
+        path: "show",
+        populate: {
+          path: "movie",
+          model: "movies",
+        },
+      })
+      .populate({
+        path: "show",
+        populate: {
+          path: "theatre",
+          model: "theatres",
+        },
+      });
+    console.log(populatedBooking);
+
+     await EmailHelper(
+      "ticketTemplate.html",
+      populatedBooking.user.email,
+      `Booking Confirmed - ${populatedBooking.show.movie.title}`,
+      `
+Booking Confirmed
+
+Movie: ${populatedBooking.show.movie.title}
+Theatre: ${populatedBooking.show.theatre.name}
+Date: ${populatedBooking.show.date}
+Time: ${populatedBooking.show.time}
+Seats: ${populatedBooking.seats.join(", ")}
+Amount: ₹ ${populatedBooking.seats.length * populatedBooking.show.ticketPrice}
+Transaction ID: ${populatedBooking.transactionId}
+`,
+      {
+        name: populatedBooking.user.name,
+        movie: populatedBooking.show.movie.title,
+        theatre: populatedBooking.show.theatre.name,
+        date: populatedBooking.show.date,
+        time: populatedBooking.show.time,
+        seats: populatedBooking.seats.join(", "),
+        amount:
+          populatedBooking.seats.length * populatedBooking.show.ticketPrice,
+        transactionId: populatedBooking.transactionId,
+      },
+    );
 
     res.status(201).json({
       success: true,
@@ -151,7 +199,7 @@ export const getPartnerBooking = async (req, res, next) => {
         },
       });
 
-      // filter recors only for partner
+    // filter recors only for partner
     const bookingFilter = bookingDetails.filter((booking) => {
       return booking.show.theatre.owner.toString() === partnerId;
     });
