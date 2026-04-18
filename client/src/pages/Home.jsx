@@ -77,7 +77,7 @@ export default function Home() {
           >
             {featuredMovie.map((item) => (
               <div
-                 onClick={() => {
+                onClick={() => {
                   addRecent(item);
                   navigate(`/movie/${item._id}`);
                 }}
@@ -90,14 +90,28 @@ export default function Home() {
                   cursor: "pointer",
                   transition: "transform 0.2s ease, box-shadow 0.2s ease",
                 }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-5px)";
+                  e.currentTarget.style.boxShadow =
+                    "0 8px 20px rgba(0,0,0,0.15)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow =
+                    "0 4px 12px rgba(0,0,0,0.08)";
+                }}
               >
                 <img
                   src={item.posterUrl}
                   alt={item.title}
                   style={{
                     width: "100%",
-                    height: "260px",
+                    height: "240px",
                     objectFit: "cover",
+                  }}
+                  onError={(e) => {
+                    e.currentTarget.src =
+                      "https://via.placeholder.com/400x600?text=No+Poster";
                   }}
                 />
 
@@ -178,7 +192,7 @@ export default function Home() {
               >
                 <div
                   style={{
-                    height: 160,
+                    height: 180,
                     background: "#f3f4f6",
                     display: "flex",
                     alignItems: "center",
@@ -250,6 +264,17 @@ export default function Home() {
                     boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
                     background: "#fff",
                     cursor: "pointer",
+                    transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "translateY(-5px)";
+                    e.currentTarget.style.boxShadow =
+                      "0 8px 20px rgba(0,0,0,0.15)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.boxShadow =
+                      "0 4px 12px rgba(0,0,0,0.08)";
                   }}
                 >
                   <img
@@ -257,16 +282,34 @@ export default function Home() {
                     alt={item.title}
                     style={{
                       width: "100%",
-                      height: "250px",
+                      height: "240px",
                       objectFit: "cover",
+                    }}
+                    onError={(e) => {
+                      e.currentTarget.src =
+                        "https://via.placeholder.com/400x600?text=No+Poster";
                     }}
                   />
 
-                  <div style={{ padding: "10px" }}>
-                    <h3 style={{ margin: 0 }}>{item.title}</h3>
-                    <p style={{ color: "#666" }}>
+                  <div style={{ padding: 14 }}>
+                    <div
+                      style={{
+                        fontWeight: 600,
+                        fontSize: 16,
+                        marginBottom: 6,
+                        color: "#111827",
+                      }}
+                    >
+                      {item.title}
+                    </div>
+
+                    <div style={{ opacity: 0.8, fontSize: 13 }}>
                       {item.genre} • {item.language}
-                    </p>
+                    </div>
+
+                    <div style={{ opacity: 0.8, fontSize: 13, marginTop: 4 }}>
+                      ⏱ {item.duration} mins
+                    </div>
                   </div>
                 </div>
               ))}
