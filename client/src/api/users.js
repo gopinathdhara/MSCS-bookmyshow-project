@@ -14,3 +14,16 @@ export const getCurrentUser = async () => {
   const response = await axiosInstance.get("/users/me");
   return response.data;
 };
+
+export const ForgetPassword = async (value) => {
+  const response = await axiosInstance.post("/users/forgetpassword", value);
+  return response.data;
+};
+
+export const ResetPassword = async (value, id) => {
+  const response = await axiosInstance.patch(
+    `/users/resetpassword/${id}`,
+    value,
+  );
+  return response.data;
+};

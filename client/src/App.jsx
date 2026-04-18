@@ -12,9 +12,11 @@ import TheatreShows from "./pages/TheatreShows";
 import MovieDetails from "./pages/MovieDetails";
 import BookShow from "./pages/BookShow";
 import MyBookings from "./pages/MyBookings";
-import Footer from "./components/Footer"; 
+import Footer from "./components/Footer";
 import AdminBookings from "./pages/AdminBookings";
 import PartnerBookings from "./pages/PartnerBookings";
+import Forget from "./pages/ForgetPassword";
+import Reset from "./pages/ResetPassword";
 
 function App() {
   return (
@@ -98,8 +100,9 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path="/forget" element={<Forget />} />
+            <Route path="/reset/:email" element={<Reset />} />
           </Routes>
-          
         </div>
 
         <Footer />
