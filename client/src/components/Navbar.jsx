@@ -1,9 +1,50 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { message } from "antd";
+import { io } from "socket.io-client";
 
 function Navbar() {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const role = localStorage.getItem("role");
+
+  // =============== websocket implemntation ==================
+
+  useEffect(() => {
+    if (token && role === "admin") {
+      //This creates connection Backend server URL where Socket.IO is running
+      const socket = io(import.meta.env.VITE_API_BASE_URL);
+
+      // join admin room
+      socket.emit("join-admin");
+
+      const handleNewBooking = (data) => {
+        console.log("new-booking received:", data);
+
+        const dateObj = new Date(data.Showdate);
+
+        const formattedDate = dateObj.toLocaleDateString("en-IN", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        });
+
+        message.open({
+          type: "success",
+          content: `${data.movieTitle} booked at ${data.theatreName} on ${formattedDate} at ${data.time}`,
+          duration: 15,
+        });
+      };
+
+      // listen to event Frontend receives
+      socket.on("new-booking", handleNewBooking);
+
+      return () => {
+        socket.off("new-booking", handleNewBooking);
+      };
+    }
+  }, [token, role]);
+  //====================================
 
   const handleLogout = () => {
     localStorage.removeItem("token"); // remove token

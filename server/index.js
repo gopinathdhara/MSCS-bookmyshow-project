@@ -9,6 +9,8 @@ import theatreRouter from "./routes/theatreRoutes.js";
 import showRouter from "./routes/showRoutes.js";
 import paymentRouter from "./routes/paymentRoute.js";
 import bookingRouter from "./routes/bookingRoute.js";
+import { Server } from "socket.io";
+import http from "http";
 
 dotenv.config();
 
@@ -17,10 +19,25 @@ connectDB();
 
 const app = express();
 
+// ============ webscoket ===========
+
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: process.env.CLIENT_URL,
+    methods: ["GET", "POST"],
+  },
+});
+
+app.set("io", io);
+
+//=========================
+
 // allow origin using cors
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: process.env.CLIENT_URL,
   }),
 );
 
@@ -29,6 +46,25 @@ app.use(express.json());
 
 // GLOBAL MIDDLEWARE
 app.use(logger);
+
+//  =========== socket connection =========
+//Backend receives connection
+
+io.on("connection", (socket) => {
+  console.log("User connected:", socket.id);
+
+  socket.on("join-admin", () => {
+    // only for admin
+    socket.join("admins");
+    console.log("Admin joined admins room");
+  });
+
+  socket.on("disconnect", () => {
+    console.log("User disconnected:", socket.id);
+  });
+});
+
+//===========================================
 
 app.use("/api", userRoute);
 app.use("/api/movies", movieRouter);
@@ -54,16 +90,11 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(5002, () => {
-  console.log("I am listening");
+// app.listen(5002, () => {
+//   console.log("I am listening");
+// });
+
+server.listen(5002, () => {
+  // NEW
+  console.log("I am listening on port 5002");
 });
-
-// try {
-//     await connectDB();
-
-//     app.listen(5001, () => {
-//       console.log("Server running on port 5000");
-//     });
-//   } catch (error) {
-//     console.log("Server start failed");
-//   }

@@ -60,7 +60,25 @@ export const bookShow = async (req, res, next) => {
       });
     console.log(populatedBooking);
 
-     await EmailHelper(
+    // using websocket for notification to admin
+    console.log("Emitting new-booking to admins room");
+    const io = req.app.get("io");
+
+    // send notification only for admin
+    io.to("admins").emit("new-booking", {
+      message: "New booking completed",
+      bookingId: newBooking._id,
+      movieTitle: populatedBooking.show.movie.title,
+      theatreName: populatedBooking.show.theatre.name,
+      seats: populatedBooking.seats.join(", "),
+      totalAmount: populatedBooking.totalAmount,
+      Showdate: populatedBooking.show.date,
+      time: populatedBooking.show.time,
+    });
+    console.log("new-booking event emitted successfully");
+
+    // sending email
+    await EmailHelper(
       "ticketTemplate.html",
       populatedBooking.user.email,
       `Booking Confirmed - ${populatedBooking.show.movie.title}`,
@@ -119,7 +137,7 @@ export const getAllMyBooking = async (req, res, next) => {
           path: "theatre",
           model: "theatres",
         },
-      });
+      }).sort({ createdAt: -1 });
     if (bookingDetails.length === 0) {
       return res.status(200).json({
         success: true,

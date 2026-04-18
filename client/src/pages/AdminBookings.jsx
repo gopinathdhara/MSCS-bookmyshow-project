@@ -58,7 +58,7 @@ const AdminBookings = () => {
     {
       title: "Date",
       key: "date",
-      render: (_, record) => record.show?.date || "N/A",
+      render: (_, record) => new Date(record.show.date).toLocaleDateString("en-IN")|| "N/A",
     },
     {
       title: "Time",
