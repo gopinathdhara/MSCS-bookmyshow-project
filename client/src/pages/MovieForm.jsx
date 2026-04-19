@@ -20,19 +20,30 @@ const MovieForm = ({
   };
 
   const onFinish = async (values) => {
-    console.log(values);
+    try {
+      console.log(values);
 
-    if (selectedMovie) {
-      let res = await updateMovie(selectedMovie._id, values);
-      message.success(res.message || "Movie updated successfully");
-    } else {
-      let res = await addMovie(values);
-      message.success(res.message || "Movie added successfully");
+      let res;
+
+      if (selectedMovie) {
+        res = await updateMovie(selectedMovie._id, values);
+      } else {
+        res = await addMovie(values);
+      }
+
+      if (res.success) {
+        message.success(res.message || "Operation successful");
+        form.resetFields();
+        setOpen(false);
+        setSelectedMovie(null);
+        onSuccess();
+      } else {
+        message.error(res.message || "Something went wrong");
+      }
+    } catch (error) {
+      console.log(error);
+      message.error(error.response?.data?.message || "Something went wrong");
     }
-    form.resetFields();
-    setOpen(false);
-    setSelectedMovie(null);
-    onSuccess();
   };
 
   useEffect(() => {
@@ -110,17 +121,17 @@ const MovieForm = ({
           </Form.Item>
 
           <Form.Item
-  label="Featured Movie"
-  name="isFeatured"
-  valuePropName="checked"
-  extra="Featured movies can be highlighted on the homepage."
->
-  <Switch
-    className="featured-switch"
-    checkedChildren="★"
-    unCheckedChildren="☆"
-  />
-</Form.Item>
+            label="Featured Movie"
+            name="isFeatured"
+            valuePropName="checked"
+            extra="Featured movies can be highlighted on the homepage."
+          >
+            <Switch
+              className="featured-switch"
+              checkedChildren="★"
+              unCheckedChildren="☆"
+            />
+          </Form.Item>
 
           <Form.Item
             label="Release Date"

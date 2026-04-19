@@ -224,7 +224,7 @@ export const getPartnerBooking = async (req, res, next) => {
           path: "theatre",
           model: "theatres",
         },
-      });
+      }).sort({ createdAt: -1 });
 
     // filter recors only for partner
     const bookingFilter = bookingDetails.filter((booking) => {

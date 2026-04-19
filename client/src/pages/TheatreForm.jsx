@@ -72,16 +72,18 @@ const TheatreForm = ({ open, setOpen, onSuccess }) => {
             rules={[
               { required: true, message: "Please enter number of rows" },
               {
-                validator: (_, value) => {
-                  if (value === undefined || value === null || value < 1) {
-                    return Promise.reject("Rows must be at least 1");
-                  }
-                  return Promise.resolve();
-                },
+                pattern: /^[1-9][0-9]*$/,
+                message: "Enter a valid number (minimum 1)",
               },
             ]}
           >
-            <Input type="number" placeholder="Eg: 5" min={1} />
+            <Input
+              type="text"
+              placeholder="Eg: 5"
+              onInput={(e) => {
+                e.target.value = e.target.value.replace(/[^0-9]/g, "");
+              }}
+            />
           </Form.Item>
 
           <Form.Item
@@ -90,16 +92,18 @@ const TheatreForm = ({ open, setOpen, onSuccess }) => {
             rules={[
               { required: true, message: "Please enter number of columns" },
               {
-                validator: (_, value) => {
-                  if (value === undefined || value === null || value < 1) {
-                    return Promise.reject("Columns must be at least 1");
-                  }
-                  return Promise.resolve();
-                },
+                pattern: /^[1-9][0-9]*$/,
+                message: "Enter a valid number (minimum 1)",
               },
             ]}
           >
-            <Input type="number" placeholder="Eg: 10" min={1} />
+            <Input
+              type="text"
+              placeholder="Eg: 10"
+              onInput={(e) => {
+                e.target.value = e.target.value.replace(/[^0-9]/g, "");
+              }}
+            />
           </Form.Item>
         </Form>
       </Modal>

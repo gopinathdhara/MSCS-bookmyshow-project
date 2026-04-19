@@ -60,6 +60,19 @@ function Navbar() {
       </div>
 
       <div className="nav-links">
+        <NavLink
+          to="/"
+          className={({ isActive }) => (isActive ? "nav-active" : "")}
+        >
+          Home
+        </NavLink>
+        <NavLink
+          to="/movies"
+          className={({ isActive }) => (isActive ? "nav-active" : "")}
+        >
+          All Movies
+        </NavLink>
+
         {token ? (
           <>
             {role == "admin" ? (
@@ -118,12 +131,6 @@ function Navbar() {
           </>
         ) : (
           <>
-            <NavLink
-              to="/"
-              className={({ isActive }) => (isActive ? "nav-active" : "")}
-            >
-              Home
-            </NavLink>
             <NavLink
               to="/login"
               className={({ isActive }) => (isActive ? "nav-active" : "")}

@@ -463,6 +463,45 @@ h1 {
   color: black !important;
 }
 
+.all-movies-page {
+  padding: 24px 40px;
+}
+
+.all-movies-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.all-movies-header h1 {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.movie-search-input {
+  max-width: 320px;
+}
+
+@media (max-width: 768px) {
+  .all-movies-page {
+    padding: 20px 16px;
+  }
+
+  .all-movies-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .movie-search-input {
+    max-width: 100%;
+  }
+}
+
 /*============for movie ===================*/
 
 .movie-list-page {

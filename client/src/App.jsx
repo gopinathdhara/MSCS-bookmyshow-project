@@ -17,6 +17,7 @@ import AdminBookings from "./pages/AdminBookings";
 import PartnerBookings from "./pages/PartnerBookings";
 import Forget from "./pages/ForgetPassword";
 import Reset from "./pages/ResetPassword";
+import AllMovies from "./pages/AllMovies";
 
 function App() {
   return (
@@ -102,6 +103,7 @@ function App() {
             />
             <Route path="/forget" element={<Forget />} />
             <Route path="/reset/:email" element={<Reset />} />
+            <Route path="/movies" element={<AllMovies />} />
           </Routes>
         </div>
 

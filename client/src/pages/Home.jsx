@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { message } from "antd";
 import { FireOutlined } from "@ant-design/icons";
+import { VideoCameraOutlined } from "@ant-design/icons";
 import {
   getAllMovies,
   getFeaturedMovies,
   getAllTrendingMovies,
+  getLatestMovies,
 } from "../api/movies";
 import HomeBanner from "../components/HomeBanner";
 
@@ -24,7 +26,7 @@ export default function Home() {
 
   const fetchMovies = async () => {
     try {
-      const res = await getAllMovies();
+      const res = await getLatestMovies();
       if (res.success) setMovies(res.data || []);
       else message.error(res.message);
     } catch (error) {
@@ -253,7 +255,12 @@ export default function Home() {
           </div>
         </div>
 
-        <h2>🎬 All Movie Shows</h2>
+        <h2 style={{marginLeft:"15px",fontSize: "24px", fontWeight: "700", color: "#1f2937"}}>
+          <VideoCameraOutlined
+            style={{ marginRight: "8px", color: "#1677ff" }}
+          />
+          Latest Movie Shows
+        </h2>
         {movies.length === 0 ? (
           <p>No movies available.</p>
         ) : (

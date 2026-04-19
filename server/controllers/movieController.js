@@ -4,6 +4,20 @@ import mongoose from "mongoose";
 // add new movie
 export const addMovie = async (req, res, next) => {
   try {
+    const { title } = req.body;
+
+    // check if movie already exists
+    const existingMovie = await movie.findOne({
+      title: { $regex: new RegExp(`^${title}$`, "i") },
+    });
+
+    if (existingMovie) {
+      return res.status(400).json({
+        success: false,
+        message: "Movie already exists",
+      });
+    }
+
     await movie.create(req.body);
     res.status(201).json({
       success: true,
@@ -27,6 +41,24 @@ export const getAllMovies = async (req, res, next) => {
     });
   } catch (error) {
     console.log(error);
+    next(error);
+  }
+};
+
+// list of latest movies
+export const getLatestMovies = async (req, res, next) => {
+  try {
+    const movies = await movie
+      .find()
+      .sort({ createdAt: -1 }) // latest first
+      .limit(5);
+
+    res.status(200).json({
+      success: true,
+      message: "Latest Movies fetched successfully",
+      data: movies,
+    });
+  } catch (error) {
     next(error);
   }
 };
@@ -148,7 +180,8 @@ export const deleteMovie = async (req, res, next) => {
 export const getTrendingMovies = async (req, res, next) => {
   try {
     // time complexity O(m log m)
-    const movies = await movie.find({}, "title posterUrl bookingCount genre language")
+    const movies = await movie
+      .find({}, "title posterUrl bookingCount genre language")
       .sort({ bookingCount: -1 })
       .limit(4);
 
