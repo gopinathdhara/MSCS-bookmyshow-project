@@ -2,6 +2,7 @@ import express from "express";
 import Booking from "../models/bookShow.js";
 import Show from "../models/showModel.js";
 import EmailHelper from "../utils/emailHelper.js";
+import movie from "../models/movieModel.js";
 
 export const bookShow = async (req, res, next) => {
   try {
@@ -39,6 +40,11 @@ export const bookShow = async (req, res, next) => {
     ].sort((a, b) => a - b);
     await Show.findByIdAndUpdate(req.body.show, {
       bookedSeats: updatedBookedSeats,
+    });
+
+    // update booking count for movie
+    await movie.findByIdAndUpdate(showDetails.movie, {
+      $inc: { bookingCount: req.body.seats.length },
     });
 
     const populatedBooking = await Booking.findById(newBooking._id)
@@ -137,7 +143,8 @@ export const getAllMyBooking = async (req, res, next) => {
           path: "theatre",
           model: "theatres",
         },
-      }).sort({ createdAt: -1 });
+      })
+      .sort({ createdAt: -1 });
     if (bookingDetails.length === 0) {
       return res.status(200).json({
         success: true,
@@ -175,7 +182,9 @@ export const getAllBooking = async (req, res, next) => {
           path: "theatre",
           model: "theatres",
         },
-      });
+      })
+      .sort({ createdAt: -1 });
+
     if (bookingDetails.length === 0) {
       return res.status(200).json({
         success: true,
@@ -239,3 +248,5 @@ export const getPartnerBooking = async (req, res, next) => {
     next(error);
   }
 };
+
+

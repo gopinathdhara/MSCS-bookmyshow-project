@@ -36,6 +36,11 @@ const movieSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    bookingCount: {
+      type: Number,
+      default: 0,
+      index: true,
+    },
   },
   { timestamps: true },
 );

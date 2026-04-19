@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { message } from "antd";
-import { getAllMovies, getFeaturedMovies } from "../api/movies";
+import { FireOutlined } from "@ant-design/icons";
+import {
+  getAllMovies,
+  getFeaturedMovies,
+  getAllTrendingMovies,
+} from "../api/movies";
 import HomeBanner from "../components/HomeBanner";
 
 export default function Home() {
@@ -9,6 +14,7 @@ export default function Home() {
   const [movies, setMovies] = useState([]);
   const [featuredMovie, setFeaturedMovie] = useState([]);
   const [recentMovies, setRecentMovies] = useState([]);
+  const [trendingMovies, setTrendingMovies] = useState([]);
 
   // for Recently Viewed movie
   useEffect(() => {
@@ -37,6 +43,15 @@ export default function Home() {
 
   useEffect(() => {
     fetchFeatured();
+  }, []);
+
+  const getTrendingMovies = async () => {
+    const res = await getAllTrendingMovies();
+    setTrendingMovies(res.data || []);
+  };
+
+  useEffect(() => {
+    getTrendingMovies();
   }, []);
 
   // Recently viewed movies using Queue
@@ -146,6 +161,92 @@ export default function Home() {
                   >
                     ⏱ {item.duration} mins
                   </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ padding: "20px" }}>
+          <h2 style={{ fontSize: "24px", fontWeight: "700", color: "#1f2937" }}>
+            <FireOutlined style={{ color: "orange", marginRight: "8px" }} />
+            Trending Movies
+          </h2>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(4, 1fr)",
+              gap: "20px",
+              background: "#f9fafb",
+              padding: "20px",
+              borderRadius: "16px",
+            }}
+          >
+            {trendingMovies.map((item) => (
+              <div
+                onClick={() => {
+                  addRecent(item);
+                  navigate(`/movie/${item._id}`);
+                }}
+                key={item._id}
+                style={{
+                  borderRadius: "16px",
+                  overflow: "hidden",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                  background: "#fff",
+                  cursor: "pointer",
+                  transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-5px)";
+                  e.currentTarget.style.boxShadow =
+                    "0 8px 20px rgba(0,0,0,0.15)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow =
+                    "0 4px 12px rgba(0,0,0,0.08)";
+                }}
+              >
+                <img
+                  src={item.posterUrl}
+                  alt={item.title}
+                  style={{
+                    width: "100%",
+                    height: "240px",
+                    objectFit: "cover",
+                  }}
+                  onError={(e) => {
+                    e.currentTarget.src =
+                      "https://via.placeholder.com/400x600?text=No+Poster";
+                  }}
+                />
+
+                <div style={{ padding: "10px" }}>
+                  <h4
+                    style={{
+                      fontWeight: 600,
+                      fontSize: 16,
+                      marginBottom: 6,
+                    }}
+                  >
+                    {item.title}
+                  </h4>
+                  <p
+                    style={{
+                      opacity: 0.8,
+                      fontSize: 13,
+
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {item.genre} • {item.language}
+                  </p>
+                  <p className="booking-count">
+                    <span className="booking-label">Total Bookings</span>
+                    <span className="booking-value">{item.bookingCount}</span>
+                  </p>
                 </div>
               </div>
             ))}

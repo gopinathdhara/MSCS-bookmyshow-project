@@ -6,7 +6,9 @@ import {
   updateMovie,
   deleteMovie,
   getAllFeaturedMovies,
+  getTrendingMovies,
 } from "../controllers/movieController.js";
+
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 import { adminMiddleware } from "../middlewares/adminMiddleware.js";
 
@@ -27,4 +29,5 @@ movieRouter.delete(
   adminMiddleware,
   deleteMovie,
 );
+movieRouter.get("/get-trending-movies", getTrendingMovies);
 export default movieRouter;

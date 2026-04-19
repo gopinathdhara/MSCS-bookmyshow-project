@@ -143,3 +143,21 @@ export const deleteMovie = async (req, res, next) => {
     next(error);
   }
 };
+
+// fetch trending movies based on booking count
+export const getTrendingMovies = async (req, res, next) => {
+  try {
+    // time complexity O(m log m)
+    const movies = await movie.find({}, "title posterUrl bookingCount genre language")
+      .sort({ bookingCount: -1 })
+      .limit(4);
+
+    res.status(200).json({
+      success: true,
+      message: "Trending movies fetched successfully",
+      data: movies,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

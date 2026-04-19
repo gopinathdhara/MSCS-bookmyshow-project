@@ -5,6 +5,11 @@ export const getAllMovies = async () => {
   return response.data;
 };
 
+export const getAllTrendingMovies = async () => {
+  const response = await axiosInstance.get("/movies/get-trending-movies");
+  return response.data;
+};
+
 export const getFeaturedMovies = async () => {
   const response = await axiosInstance.get("/movies/get-featured-movies");
   return response.data;
