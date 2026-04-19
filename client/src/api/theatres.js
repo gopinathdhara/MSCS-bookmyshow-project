@@ -30,3 +30,15 @@ export const approveTheatre = async (payload) => {
     return error.response?.data || { success: false, message: error.message };
   }
 };
+
+export const rejectTheatre = async (payload) => {
+  try {
+    const response = await axiosInstance.patch(
+      "/theatres/reject-theatre",
+      payload,
+    );
+    return response.data;
+  } catch (error) {
+    return error.response?.data || { success: false, message: error.message };
+  }
+};

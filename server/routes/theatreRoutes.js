@@ -4,6 +4,7 @@ import {
   getMyTheatres,
   approveTheatre,
   getAllTheatres,
+  rejectTheatre
 } from "../controllers/theatreController.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 import { partnerMiddleware } from "../middlewares/partnerMiddleware.js";
@@ -48,6 +49,14 @@ theatreRouter.patch(
   adminMiddleware,
   validateApproveTheatre,
   approveTheatre,
+);
+
+theatreRouter.patch(
+  "/reject-theatre",
+  authMiddleware,
+  adminMiddleware,
+  validateApproveTheatre,
+  rejectTheatre,
 );
 
 /* ======================= */

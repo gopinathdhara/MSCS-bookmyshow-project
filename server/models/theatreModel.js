@@ -36,11 +36,24 @@ const theatreSchema = new mongoose.Schema(
       ref: "users",
       required: true,
     },
-    isApproved: {
-      type: Boolean,
-      default: false,
+
+    // isApproved: {
+    //   type: Boolean,
+    //   default: false,
+    // },
+
+    status: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: "pending",
     },
-    
+
+    rejectionReason: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
     // seat layout
     rows: {
       type: Number,

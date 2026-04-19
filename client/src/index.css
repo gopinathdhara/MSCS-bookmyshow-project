@@ -475,6 +475,39 @@ h1 {
   margin-bottom: 24px;
   flex-wrap: wrap;
 }
+.movie-booking-header {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.movie-poster {
+  width: 120px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.movie-info h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.movie-info p {
+  color: #666;
+  margin-top: 6px;
+}
+
+.movie-description {
+  font-size: 16px;
+  line-height: 1.9;
+  color: #374151;
+  margin-top: 12px;
+  margin-bottom: 0;
+  text-align: justify;
+  max-width: 900px;
+}
 
 .all-movies-header h1 {
   margin: 0;
@@ -570,8 +603,8 @@ h1 {
 }
 
 .movie-poster {
-  width: 70px;
-  height: 95px;
+  width: 140px;
+  height: 190px;
   object-fit: cover;
   border-radius: 10px;
   border: 1px solid #e5e7eb;

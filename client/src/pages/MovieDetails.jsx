@@ -87,30 +87,31 @@ export default function MovieDetails() {
 
   return (
     <div style={{ marginTop: "20px", marginLeft: "20px" }}>
-      <div style={{ marginBottom: "20px" }}>
-        <h2
-          style={{
-            color: "#111827",
-            fontSize: "26px",
-            fontWeight: "700",
-            marginBottom: "5px",
-            letterSpacing: "0.5px",
-          }}
-        >
-          🎬 {movie.title}
-        </h2>
+      <div
+        className="movie-booking-header"
+        style={{ marginTop: "20px", marginLeft: "20px" }}
+      >
+        <img src={movie.posterUrl} className="movie-poster" />
 
-        <p
-          style={{
-            color: "#6b7280",
-            fontSize: "14px",
-            marginTop:"20px"
-          }}
-        >
-          {movie.language} • {movie.genre} • {movie.duration} mins
-        </p>
+        <div className="movie-info">
+          <h2
+            style={{
+              color: "#111827",
+              fontSize: "26px",
+              fontWeight: "700",
+              marginBottom: "5px",
+              letterSpacing: "0.5px",
+            }}
+          >
+            🎬 {movie.title}
+          </h2>
+          <p className="movie-description">{movie.description}</p>
+          <p>
+            {movie.genre} | {movie.duration} mins | {movie.language}
+          </p>
+        </div>
       </div>
-      
+
       <h3 style={{ marginBottom: 12 }}>Select Date</h3>
 
       <div style={{ marginBottom: 24 }}>
@@ -140,10 +141,15 @@ export default function MovieDetails() {
                 padding: 16,
               }}
             >
-              <div style={{ fontWeight: 600, fontSize: 16 }} className="theatre-name">
+              <div
+                style={{ fontWeight: 600, fontSize: 16 }}
+                className="theatre-name"
+              >
                 {group.theatre.name}
               </div>
-              <div style={{ opacity: 0.85 }} className="theatre-address">{group.theatre.address}</div>
+              <div style={{ opacity: 0.85 }} className="theatre-address">
+                {group.theatre.address}
+              </div>
 
               <div
                 style={{
@@ -151,7 +157,8 @@ export default function MovieDetails() {
                   display: "flex",
                   gap: 10,
                   flexWrap: "wrap",
-                }} className="show-time-list"
+                }}
+                className="show-time-list"
               >
                 {group.shows.map((show) => (
                   <Button

@@ -5,50 +5,48 @@ import mongoose from "mongoose";
 
 // add new show
 export const addShow = async (req, res, next) => {
-  const { movie, theatre, date, time } = req.body;
-
-  // check if Theatre found
-  const theatreInfo = await Theatre.findById(theatre);
-
-  if (!theatreInfo) {
-    return res.status(404).send({
-      success: false,
-      message: "Theatre not found",
-      data: null,
-    });
-  }
-
-  // check if Theatre approved
-  if (theatreInfo.isApproved !== true) {
-    return res.status(400).send({
-      success: false,
-      message: "Theatre is not approved yet",
-      data: null,
-    });
-  }
-
-  // check theatre owner same as user logged in
-  if (theatreInfo.owner.toString() !== req.userId.toString()) {
-    return res.status(403).send({
-      success: false,
-      message: "Forbidden",
-      data: null,
-    });
-  }
-
-  // check if Movie found
-  const movieInfo = await Movie.findById(movie);
-
-  if (!movieInfo) {
-    return res.status(404).send({
-      success: false,
-      message: "Movie not found",
-      data: null,
-    });
-  }
-
-  //dupliacte show check
   try {
+    const { movie, theatre, date, time } = req.body;
+    // check if Theatre found
+    const theatreInfo = await Theatre.findById(theatre);
+
+    if (!theatreInfo) {
+      return res.status(404).send({
+        success: false,
+        message: "Theatre not found",
+        data: null,
+      });
+    }
+
+    // check if Theatre approved
+    if (theatreInfo.status !== "approved") {
+      return res.status(400).send({
+        success: false,
+        message: "Theatre is not approved yet",
+        data: null,
+      });
+    }
+
+    // check theatre owner same as user logged in
+    if (theatreInfo.owner.toString() !== req.userId.toString()) {
+      return res.status(403).send({
+        success: false,
+        message: "Forbidden",
+        data: null,
+      });
+    }
+    // check if Movie found
+    const movieInfo = await Movie.findById(movie);
+
+    if (!movieInfo) {
+      return res.status(404).send({
+        success: false,
+        message: "Movie not found",
+        data: null,
+      });
+    }
+
+    // duplicate show check
     const existingShow = await Show.findOne({
       theatre,
       movie,
@@ -79,6 +77,23 @@ export const getShowsByTheatre = async (req, res, next) => {
   try {
     const { theatreId } = req.query;
 
+    const theatreInfo = await Theatre.findById(theatreId);
+
+    if (!theatreInfo) {
+      return res.status(404).json({
+        success: false,
+        message: "Theatre not found",
+      });
+    }
+
+    if (theatreInfo.status !== "approved") {
+      return res.status(400).json({
+        success: false,
+        message: "Theatre is not approved",
+      });
+    }
+
+    // fetch shows only for approved theatre
     const shows = await Show.find({
       theatre: theatreId,
     })
@@ -105,13 +120,22 @@ export const getShowsByMovie = async (req, res, next) => {
       movie: movieId,
       date: date,
     })
-      .populate("theatre")
+      .populate({
+        path: "theatre",
+        match: { status: "approved" },
+      })
       .sort({ date: 1, time: 1 });
+
+    const filteredShows = shows.filter((show) => show.theatre !== null);
+
+    console.log("raw shows:", filteredShows);
+
+    //console.log(shows);
 
     res.status(200).json({
       success: true,
       message: "Shows fetched successfully",
-      data: shows,
+      data: filteredShows,
     });
   } catch (error) {
     console.log(error);

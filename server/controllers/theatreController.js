@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 
 // add new Theatre
 export const addTheatre = async (req, res, next) => {
+
+  
   try {
     const existingTheatre = await Theatre.findOne({
       name: req.body.name.trim(),
@@ -69,9 +71,10 @@ export const approveTheatre = async (req, res, next) => {
 
     const theatre = await Theatre.findByIdAndUpdate(
       theatreId,
-      { isApproved: true },
+      { status: "approved", rejectionReason: "" },
       {
         new: true, // return updated data
+        runValidators: true,
       },
     );
 
@@ -85,6 +88,44 @@ export const approveTheatre = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: "Theatre approved successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+// reject Theatres by admin
+export const rejectTheatre = async (req, res, next) => {
+  try {
+    const { theatreId, rejectionReason } = req.body;
+
+    if (!rejectionReason) {
+      return res.status(400).json({
+        success: false,
+        message: "Please give rejection reason",
+      });
+    }
+
+    const theatre = await Theatre.findByIdAndUpdate(
+      theatreId,
+      { status: "rejected", rejectionReason: rejectionReason },
+      {
+        new: true,
+        runValidators: true, // check model Schema validation
+      },
+    );
+
+    if (!theatre) {
+      return res.status(404).json({
+        success: false,
+        message: "Theatre not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Theatre rejected successfully",
     });
   } catch (error) {
     console.log(error);

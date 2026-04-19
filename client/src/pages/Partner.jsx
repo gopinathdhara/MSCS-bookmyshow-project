@@ -35,18 +35,38 @@ function Partner() {
     { title: "Email", dataIndex: "email", ellipsis: true },
     {
       title: "Status",
-      render: (_, record) =>
-        record.isApproved ? (
-          <Tag color="green">Approved</Tag>
+      dataIndex: "status",
+      render: (status) => {
+        if (status === "approved") {
+          return <span style={{ color: "green" }}>Approved</span>;
+        }
+        if (status === "rejected") {
+          return <span style={{ color: "red" }}>Rejected</span>;
+        }
+        return <span style={{ color: "orange" }}>Pending</span>;
+      },
+    },
+    {
+      title: "Reason",
+      dataIndex: "rejectionReason",
+      ellipsis: true,
+      render: (value) =>
+        value ? (
+          <Tooltip title={value}>
+            <span style={{ color: "red" }}>
+              {value.length > 20 ? value.slice(0, 20) + "..." : value}
+            </span>
+          </Tooltip>
         ) : (
-          <Tag color="yellow">Pending</Tag>
+          <span style={{ color: "#999" }}>No reason</span>
         ),
     },
     {
       title: "Add Shows",
       render: (_, record) =>
-        record.isApproved && (
+        record.status === "approved" && (
           <Button
+            type="primary"
             onClick={() => navigate(`/partner/theatres/${record._id}/shows`)}
           >
             + Shows
@@ -66,8 +86,13 @@ function Partner() {
       >
         Add Theatre
       </Button>
-      <Table dataSource={theatres} loading={loading} columns={tableColumns} bordered
-        pagination={{ pageSize: 5 }} />
+      <Table
+        dataSource={theatres}
+        loading={loading}
+        columns={tableColumns}
+        bordered
+        pagination={{ pageSize: 5 }}
+      />
       <TheatreForm open={open} setOpen={setOpen} onSuccess={fetchTheatres} />
     </div>
   );

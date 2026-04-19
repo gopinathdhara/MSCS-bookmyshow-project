@@ -4,11 +4,12 @@ import mongoose from "mongoose";
 // add new movie
 export const addMovie = async (req, res, next) => {
   try {
-    const { title } = req.body;
+    const { title,language  } = req.body;
 
-    // check if movie already exists
+    //check if same movie in same language already exists
     const existingMovie = await movie.findOne({
-      title: { $regex: new RegExp(`^${title}$`, "i") },
+      title: { $regex: new RegExp(`^${title}$`, "i") }, // case-insensitive
+      language: { $regex: new RegExp(`^${language}$`, "i") },
     });
 
     if (existingMovie) {
@@ -19,6 +20,7 @@ export const addMovie = async (req, res, next) => {
     }
 
     await movie.create(req.body);
+
     res.status(201).json({
       success: true,
       message: "Movie inserted successfully",
