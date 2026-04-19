@@ -3,7 +3,7 @@ import Theatre from "../models/theatreModel.js";
 import Movie from "../models/movieModel.js";
 import mongoose from "mongoose";
 
-// add new show
+// add new show by partner
 export const addShow = async (req, res, next) => {
   try {
     const { movie, theatre, date, time } = req.body;
@@ -72,7 +72,7 @@ export const addShow = async (req, res, next) => {
   }
 };
 
-// get shows for specific theatre
+// get shows for specific theatre of partner
 export const getShowsByTheatre = async (req, res, next) => {
   try {
     const { theatreId } = req.query;
@@ -111,7 +111,7 @@ export const getShowsByTheatre = async (req, res, next) => {
   }
 };
 
-//find show by movie id and selected date
+//find show by movie id and selected date for front end user
 export const getShowsByMovie = async (req, res, next) => {
   try {
     const { movieId, date } = req.query;
@@ -119,6 +119,7 @@ export const getShowsByMovie = async (req, res, next) => {
     const shows = await Show.find({
       movie: movieId,
       date: date,
+      status: "active",
     })
       .populate({
         path: "theatre",
@@ -159,11 +160,74 @@ export const getShowsById = async (req, res, next) => {
         data: null,
       });
     }
+    if (shows.status !== "active") {
+      return res.status(400).json({
+        success: false,
+        message: "This show is not available for booking",
+      });
+    }
 
     res.status(200).json({
       success: true,
       message: "Shows fetched successfully",
       data: shows,
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+// update show status for partner
+
+export const updateShowStatus = async (req, res, next) => {
+  try {
+    const { showId } = req.params;
+    const { status } = req.body;
+
+    // validate status
+    const allowedStatus = ["active", "cancelled", "completed"];
+
+    if (!allowedStatus.includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid status value",
+      });
+    }
+
+    const showDetails = await Show.findById(showId).populate("theatre");
+
+    if (!showDetails) {
+      return res.status(404).json({
+        success: false,
+        message: "Show not found",
+      });
+    }
+
+    if (showDetails.theatre.owner.toString() != req.userId.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: "Forbidden",
+        data: null,
+      });
+    }
+
+    // check if Theatre approved
+    if (showDetails.theatre.status !== "approved") {
+      return res.status(400).send({
+        success: false,
+        message: "Theatre is not approved yet",
+        data: null,
+      });
+    }
+
+    showDetails.status = status;
+    showDetails.save();
+
+    return res.status(200).json({
+      success: true,
+      message: `Show marked as ${status}`,
+      data: showDetails,
     });
   } catch (error) {
     console.log(error);

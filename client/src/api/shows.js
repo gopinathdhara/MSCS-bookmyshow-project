@@ -23,3 +23,12 @@ export const getShowById = async (showId) => {
   const response = await axiosInstance.get(`/shows/get-by-id?showId=${showId}`);
   return response.data;
 };
+
+export const updateShowStatus = async (showId,status) => {
+  console.log(showId);
+  const response = await axiosInstance.put(
+    `/shows/update-show-status/${showId}`,
+    {status:status},
+  );
+  return response.data;
+};

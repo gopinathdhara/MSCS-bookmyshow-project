@@ -28,6 +28,11 @@ const showSchema = new mongoose.Schema(
       type: [Number],
       default: [],
     },
+    status: {
+      type: String,
+      enum: ["active", "cancelled", "completed"],
+      default: "active",
+    },
   },
   { timestamps: true },
 );

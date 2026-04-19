@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import TheatreForm from "./TheatreForm.jsx";
+import { updateShowStatus } from "../api/shows";
 import {
   Button,
   Select,
@@ -10,10 +11,11 @@ import {
   Tooltip,
   Flex,
   Typography,
+  message,
 } from "antd";
 import { EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { getShowsByTheatre, addShow } from "../api/shows.js";
-import { Form, Input, Modal, message } from "antd";
+import { Form, Input, Modal } from "antd";
 import { getAllMovies } from "../api/movies.js";
 import { useParams } from "react-router-dom";
 const { Title, Text } = Typography;
@@ -87,6 +89,22 @@ function TheatreShows() {
     return `${hour}:${minute} ${ampm}`;
   };
 
+  const handleUpdateShowStatus = async (showId, status) => {
+    
+    try {
+      const res = await updateShowStatus(showId, status);
+      console.log(res);
+      if (res.success) {
+        message.success(res.message || "Show status updated successfully");
+        fetchData();
+      } else {
+        message.error(res.message || "Failed to update show status");
+      }
+    } catch (error) {
+      message.error(error.response?.data?.message || "Something went wrong");
+    }
+  };
+
   return (
     <div
       style={{
@@ -152,12 +170,35 @@ function TheatreShows() {
                   padding: 12,
                 }}
               >
-                <div style={{ fontWeight: 600 }}>
+                <div
+                  style={{
+                    fontWeight: 600,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    marginBottom:"10px"
+                  }}
+                >
                   {show.movie?.title || "Movie"}
+
+                  <Select
+                    value={show.status}
+                    style={{ width: 140 }}
+                    onChange={(value) =>
+                      handleUpdateShowStatus(show._id, value)
+                    }
+                    options={[
+                      { value: "active", label: "Active" },
+                      { value: "cancelled", label: "Cancelled" },
+                      { value: "completed", label: "Completed" },
+                    ]}
+                  />
                 </div>
+
                 <div>Date: {show.date}</div>
                 <div>Time: {formatTime(show.time)}</div>
                 <div>Ticket Price: ₹{show.ticketPrice}</div>
+                <div></div>
               </div>
             ))}
           </div>

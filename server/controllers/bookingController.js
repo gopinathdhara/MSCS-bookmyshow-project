@@ -4,15 +4,31 @@ import Show from "../models/showModel.js";
 import EmailHelper from "../utils/emailHelper.js";
 import movie from "../models/movieModel.js";
 
+// Seat Booking by user
 export const bookShow = async (req, res, next) => {
   try {
     // get show detais
-    const showDetails = await Show.findById(req.body.show);
+    const showDetails = await Show.findById(req.body.show).populate("theatre");
+
+    // check theatre approval
+    if (showDetails.theatre.status !== "approved") {
+      return res.status(400).json({
+        success: false,
+        message: "Theatre is not approved. Booking not allowed",
+      });
+    }
 
     if (!showDetails) {
       return res.status(404).json({
         success: false,
         message: "Show not found",
+      });
+    }
+    // only active show can be booked
+    if (showDetails.status !== "active") {
+      return res.status(400).json({
+        success: false,
+        message: "This show is not available for booking",
       });
     }
 
@@ -224,7 +240,8 @@ export const getPartnerBooking = async (req, res, next) => {
           path: "theatre",
           model: "theatres",
         },
-      }).sort({ createdAt: -1 });
+      })
+      .sort({ createdAt: -1 });
 
     // filter recors only for partner
     const bookingFilter = bookingDetails.filter((booking) => {
@@ -248,5 +265,3 @@ export const getPartnerBooking = async (req, res, next) => {
     next(error);
   }
 };
-
-

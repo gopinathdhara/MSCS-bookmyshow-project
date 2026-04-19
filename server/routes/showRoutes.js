@@ -5,13 +5,14 @@ import {
   addShow,
   getShowsByTheatre,
   getShowsByMovie,
-  getShowsById
+  getShowsById,
+  updateShowStatus,
 } from "../controllers/showController.js";
 import {
   validateAddShow,
   validateGetShowsByTheatre,
   validateGetShowsByMovie,
-  validateGetShowById
+  validateGetShowById,
 } from "../middlewares/showValidation.js";
 
 const router = express.Router();
@@ -37,10 +38,13 @@ router.get(
   getShowsByTheatre,
 );
 
-router.get(
-  "/get-by-id",
+router.get("/get-by-id", authMiddleware, getShowsById);
+
+router.put(
+  "/update-show-status/:showId",
   authMiddleware,
-  getShowsById,
+  partnerMiddleware,
+  updateShowStatus,
 );
 
 export default router;
