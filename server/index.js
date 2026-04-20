@@ -63,12 +63,16 @@ app.use(limiter);
 
 app.use(helmet());
 
-
 // GLOBAL MIDDLEWARE
 app.use(express.json());
 
 //secure application to santize user input to prevent no sql injection
-app.use(mongoSanitize());
+app.use((req, res, next) => {
+  if (req.body) mongoSanitize.sanitize(req.body);
+  if (req.params) mongoSanitize.sanitize(req.params);
+  if (req.query) mongoSanitize.sanitize(req.query);
+  next();
+});
 
 // GLOBAL MIDDLEWARE
 app.use(logger);
