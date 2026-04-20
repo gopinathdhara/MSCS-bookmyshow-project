@@ -11,6 +11,9 @@ import paymentRouter from "./routes/paymentRoute.js";
 import bookingRouter from "./routes/bookingRoute.js";
 import { Server } from "socket.io";
 import http from "http";
+import mongoSanitize from "express-mongo-sanitize";
+import { rateLimit } from "express-rate-limit";
+import helmet from "helmet";
 
 dotenv.config();
 
@@ -19,7 +22,7 @@ connectDB();
 
 const app = express();
 
-// ============ webscoket ===========
+// ============ webscoket Socket.IO ===========
 
 const server = http.createServer(app);
 
@@ -41,8 +44,31 @@ app.use(
   }),
 );
 
+// ============ security for DoS Denial of Service attack===========
+
+const limiter = rateLimit({
+  windowMs: 10 * 1000 * 60,
+  max: 100,
+  message: {
+    success: false,
+    message: "Too many requests from this IP. Please try again in 10 minutes",
+  },
+});
+
+app.use(limiter);
+
+//====================
+
+// secure Express apps by setting HTTP response headers
+
+app.use(helmet());
+
+
 // GLOBAL MIDDLEWARE
 app.use(express.json());
+
+//secure application to santize user input to prevent no sql injection
+app.use(mongoSanitize());
 
 // GLOBAL MIDDLEWARE
 app.use(logger);
@@ -65,6 +91,8 @@ io.on("connection", (socket) => {
 });
 
 //===========================================
+
+//routes
 
 app.use("/api", userRoute);
 app.use("/api/movies", movieRouter);

@@ -1,15 +1,21 @@
 export const logger = (req, res, next) => {
-  // console.log(req.url);
-  // console.log(req.method);
+  const start = Date.now();
 
-  // Get current timestamp
-  const timestamp = new Date().toISOString();
-
-  // Get HTTP method (GET, POST, etc.)
+  const timestamp = new Date().toLocaleString("en-IN", {
+    timeZone: "Asia/Kolkata",
+  });
   const method = req.method;
+  const url = req.url;
+  const ip = req.ip;
 
-  // Log format
-  console.log(`[${timestamp}] ${method} ${req.url}`);
+  res.on("finish", () => {
+    const statusCode = res.statusCode;
+    const responseTime = Date.now() - start;
+
+    console.log(
+      `[${timestamp}] ${ip} ${method} ${url} ${statusCode} ${responseTime}ms`,
+    );
+  });
 
   next();
 };
