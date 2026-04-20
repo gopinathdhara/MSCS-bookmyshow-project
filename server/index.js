@@ -126,7 +126,8 @@ app.use((err, req, res, next) => {
 //   console.log("I am listening");
 // });
 
-server.listen(5002, () => {
-  // NEW
-  console.log("I am listening on port 5002");
+const PORT = process.env.PORT || 5002;
+
+server.listen(PORT, () => {
+  console.log(`I am listening on port ${PORT}`);
 });
