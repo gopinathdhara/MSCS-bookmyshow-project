@@ -25,6 +25,9 @@ const app = express();
 // ============ webscoket Socket.IO ===========
 
 const server = http.createServer(app);
+server.keepAliveTimeout = 120000; 
+server.headersTimeout = 125000; 
+
 
 const io = new Server(server, {
   cors: {
@@ -97,6 +100,12 @@ io.on("connection", (socket) => {
 //===========================================
 
 //routes
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Server is healthy",
+  });
+});
 
 app.use("/api", userRoute);
 app.use("/api/movies", movieRouter);
