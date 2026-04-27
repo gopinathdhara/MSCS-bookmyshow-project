@@ -1,10 +1,15 @@
 import movie from "../models/movieModel.js";
 import mongoose from "mongoose";
+import {
+  movieCache,
+  MOVIE_CACHE_KEYS,
+  clearMovieCache,
+} from "../utils/movieCache.js";
 
 // add new movie
 export const addMovie = async (req, res, next) => {
   try {
-    const { title,language  } = req.body;
+    const { title, language } = req.body;
 
     //check if same movie in same language already exists
     const existingMovie = await movie.findOne({
@@ -21,6 +26,9 @@ export const addMovie = async (req, res, next) => {
 
     await movie.create(req.body);
 
+    // Clear cache because new movie added
+    clearMovieCache();
+
     res.status(201).json({
       success: true,
       message: "Movie inserted successfully",
@@ -34,8 +42,28 @@ export const addMovie = async (req, res, next) => {
 // list of all movies
 export const getAllMovies = async (req, res, next) => {
   try {
-    //Latest movie first
+    // use cache to imporve performance
+    const cacheKey = MOVIE_CACHE_KEYS.ALL_MOVIES;
+
+    //  Check cache first
+    if (movieCache.has(cacheKey)) {
+      console.log("Movies fetched from cache");
+
+      return res.status(200).json({
+        success: true,
+        message: "Movies fetched from cache",
+        data: movieCache.get(cacheKey),
+      });
+    }
+
+    //  If not in cache, fetch from MongoDB
+    console.log("Movies fetched from database");
+
     let movies = await movie.find().sort({ createdAt: -1 });
+
+    // Store result in cache
+    movieCache.set(cacheKey, movies);
+
     res.status(200).json({
       success: true,
       message: "all Movie fetched successfully",
@@ -50,10 +78,27 @@ export const getAllMovies = async (req, res, next) => {
 // list of latest movies
 export const getLatestMovies = async (req, res, next) => {
   try {
+    // use cache to imporve performance
+    const cacheKey = MOVIE_CACHE_KEYS.LATEST_MOVIES;
+
+    if (movieCache.has(cacheKey)) {
+      console.log("Movies fetched from cache for Latest Movies");
+
+      return res.status(200).json({
+        success: true,
+        message: "Latest movies fetched from cache",
+        data: movieCache.get(cacheKey),
+      });
+    }
+
+    console.log("Movies fetched from database for Latest Movies");
+
     const movies = await movie
       .find()
       .sort({ createdAt: -1 }) // latest first
       .limit(5);
+
+    movieCache.set(cacheKey, movies);
 
     res.status(200).json({
       success: true,
@@ -98,7 +143,26 @@ export const getMovieByID = async (req, res, next) => {
 
 export const getAllFeaturedMovies = async (req, res, next) => {
   try {
+    const cacheKey = MOVIE_CACHE_KEYS.FEATURED_MOVIES;
+
+    // check cache
+    if (movieCache.has(cacheKey)) {
+      console.log("Movies fetched from cache for Featured Movies");
+
+      return res.status(200).json({
+        success: true,
+        message: "Featured movies fetched from cache",
+        data: movieCache.get(cacheKey),
+      });
+    }
+
+    //  If not in cache, fetch from MongoDB
+    console.log("Movies fetched from database for Featured Movies");
+
     let movies = await movie.find({ isFeatured: true }).sort({ createdAt: -1 });
+
+    // store in cache
+    movieCache.set(cacheKey, movies);
 
     if (movies.length === 0) {
       return res.status(200).json({
@@ -139,6 +203,10 @@ export const updateMovie = async (req, res, next) => {
         message: "Movie not found",
       });
     }
+
+    // Clear cache because new movie added
+    clearMovieCache();
+
     res.status(200).json({
       success: true,
       message: "Movie updated successfully",
@@ -168,6 +236,10 @@ export const deleteMovie = async (req, res, next) => {
         message: "Movie not found",
       });
     }
+
+    // Clear cache because new movie added
+    clearMovieCache();
+
     res.status(200).json({
       success: true,
       message: "Movie deleted successfully",
@@ -181,11 +253,29 @@ export const deleteMovie = async (req, res, next) => {
 // fetch trending movies based on booking count
 export const getTrendingMovies = async (req, res, next) => {
   try {
+    const cacheKey = MOVIE_CACHE_KEYS.TRENDING_MOVIES;
+
+    if (movieCache.has(cacheKey)) {
+      console.log("Movies fetched from cache for Trending Movies");
+
+      return res.status(200).json({
+        success: true,
+        message: "Trending movies fetched from cache",
+        data: movieCache.get(cacheKey),
+      });
+    }
+
+    //  If not in cache, fetch from MongoDB
+    console.log("Movies fetched from database for Trending Movies");
+
     // time complexity O(m log m)
     const movies = await movie
       .find({}, "title posterUrl bookingCount genre language")
       .sort({ bookingCount: -1 })
       .limit(4);
+
+    //store in cache
+    movieCache.set(cacheKey, movies);
 
     res.status(200).json({
       success: true,

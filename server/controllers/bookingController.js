@@ -3,6 +3,11 @@ import Booking from "../models/bookShow.js";
 import Show from "../models/showModel.js";
 import EmailHelper from "../utils/emailHelper.js";
 import movie from "../models/movieModel.js";
+import {
+  movieCache,
+  MOVIE_CACHE_KEYS,
+  clearMovieCache,
+} from "../utils/movieCache.js";
 
 // Seat Booking by user
 export const bookShow = async (req, res, next) => {
@@ -62,6 +67,9 @@ export const bookShow = async (req, res, next) => {
     await movie.findByIdAndUpdate(showDetails.movie, {
       $inc: { bookingCount: req.body.seats.length },
     });
+
+    // delete cache
+    movieCache.delete(MOVIE_CACHE_KEYS.TRENDING_MOVIES);
 
     const populatedBooking = await Booking.findById(newBooking._id)
       .populate("user")
