@@ -58,7 +58,9 @@ export default function BookShow() {
     return (
       <div className="d-flex flex-column align-items-center">
         <div className="w-100 max-width-600 mx-auto mb-25px">
-          <p className="text-center">Screen this side</p>
+          <div className="screen">
+            <span>SCREEN THIS SIDE</span>
+          </div>
         </div>
 
         {/* eventual array becomes 0, 1, 2, 3, 4 
@@ -129,6 +131,12 @@ export default function BookShow() {
                           }}
                           className={seatClass}
                           disabled={bookedSeatsSet.has(seatNumber)}
+                          style={{
+                            marginLeft:
+                              column === Math.floor(columns / 2)
+                                ? "60px"
+                                : "6px",
+                          }}
                         >
                           {seatNumber}
                         </button>
