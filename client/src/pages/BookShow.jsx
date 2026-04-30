@@ -1,7 +1,7 @@
 import { getShowById } from "../api/shows.js";
 import { useNavigate, useParams } from "react-router-dom"; // Hooks for routing
 import { useEffect, useState } from "react";
-import { message, Card, Button } from "antd"; // UI components
+import { message, Card, Button, Modal } from "antd"; // UI components
 import StripeCheckout from "react-stripe-checkout";
 import { bookShow, makePayment } from "../api/booking";
 
@@ -185,14 +185,50 @@ export default function BookShow() {
   };
 
   const book = async (transactionId) => {
-    const response = await bookShow({
-      seats: selectedSeats,
-      transactionId,
-      show: showId,
-      totalAmount: selectedSeats.length * show.ticketPrice,
-    });
-    if (response.success) {
-      navigate("/mybookings");
+    try {
+      const response = await bookShow({
+        seats: selectedSeats,
+        transactionId,
+        show: showId,
+        totalAmount: selectedSeats.length * show.ticketPrice,
+      });
+      if (response.success) {
+        Modal.success({
+          title: "Booking Confirmed!",
+          content: (
+            <div>
+              <p>
+                Your payment was successful and your movie tickets are booked.
+              </p>
+              <p>
+                <strong>Movie:</strong> {show.movie.title}
+              </p>
+              <p>
+                <strong>Theatre:</strong> {show.theatre.name}
+              </p>
+              <p>
+                <strong>Seats:</strong> {selectedSeats.join(", ")}
+              </p>
+              <p>
+                <strong>Total Amount:</strong>{" "}
+                {new Intl.NumberFormat("en-IN", {
+                  style: "currency",
+                  currency: "INR",
+                }).format(selectedSeats.length * show.ticketPrice)}
+              </p>
+            </div>
+          ),
+          okText: "View My Bookings",
+          centered: true,
+          onOk: () => {
+            navigate("/mybookings");
+          },
+        });
+      } else {
+        message.error(response.message);
+      }
+    } catch (err) {
+      message.error(err.message);
     }
   };
 
