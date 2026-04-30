@@ -28,7 +28,7 @@ function Partner() {
   }, []);
 
   const tableColumns = [
-    { title: "Name", dataIndex: "name" },
+    { title: "Theatre Name", dataIndex: "name" },
     { title: "Address", dataIndex: "address", ellipsis: true },
     { title: "City", dataIndex: "city" },
     { title: "Phone", dataIndex: "phone", width: 140 },

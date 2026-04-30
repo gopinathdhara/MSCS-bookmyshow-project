@@ -71,7 +71,7 @@ function TheatersTable() {
   };
 
   const tableColumns = [
-    { title: "Name", dataIndex: "name" },
+    { title: "Theatre Name", dataIndex: "name" },
     { title: "Address", dataIndex: "address", ellipsis: true },
     {
       title: "Owner",
