@@ -1,10 +1,6 @@
 import movie from "../models/movieModel.js";
 import mongoose from "mongoose";
-import {
-  movieCache,
-  MOVIE_CACHE_KEYS,
-  clearMovieCache,
-} from "../utils/movieCache.js";
+import { movieCache, MOVIE_CACHE_KEYS } from "../utils/movieCache.js";
 
 // add new movie
 export const addMovie = async (req, res, next) => {
@@ -27,7 +23,8 @@ export const addMovie = async (req, res, next) => {
     await movie.create(req.body);
 
     // Clear cache because new movie added
-    clearMovieCache();
+
+    movieCache.clear();
 
     res.status(201).json({
       success: true,
@@ -42,32 +39,66 @@ export const addMovie = async (req, res, next) => {
 // list of all movies
 export const getAllMovies = async (req, res, next) => {
   try {
-    // use cache to imporve performance
-    const cacheKey = MOVIE_CACHE_KEYS.ALL_MOVIES;
+    //for search movie
+    const search = req.query.search?.trim() || "";
 
-    //  Check cache first
+    const query = {
+      title: { $regex: `^${search}`, $options: "i" },
+    };
+
+    // use cache to imporve performance
+    // for pagination get page and limit from query params
+
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 8;
+
+    // Unique cache key for each page
+    const cacheKey = `movies_page_${page}_limit_${limit}_search_${search}`;
+
+    // Check cache
     if (movieCache.has(cacheKey)) {
       console.log("Movies fetched from cache");
 
       return res.status(200).json({
         success: true,
         message: "Movies fetched from cache",
-        data: movieCache.get(cacheKey),
+        data: movieCache.get(cacheKey).movies,
+        pagination: movieCache.get(cacheKey).pagination,
       });
     }
 
     //  If not in cache, fetch from MongoDB
     console.log("Movies fetched from database");
 
-    let movies = await movie.find().sort({ createdAt: -1 });
+    // Calculate how many records to skip
+    const skip = (page - 1) * limit;
+
+    let movies = await movie
+      .find(query)
+      .sort({ createdAt: -1 }) // latest movies first
+      .skip(skip)
+      .limit(limit);
+
+    const totalMovies = await movie.countDocuments(query);
+
+    const pagination = {
+      currentPage: page,
+      limit,
+      totalMovies,
+      totalPages: Math.ceil(totalMovies / limit),
+    };
 
     // Store result in cache
-    movieCache.set(cacheKey, movies);
+    movieCache.set(cacheKey, {
+      movies: movies,
+      pagination: pagination,
+    });
 
     res.status(200).json({
       success: true,
       message: "all Movie fetched successfully",
       data: movies,
+      pagination: pagination,
     });
   } catch (error) {
     console.log(error);
@@ -205,7 +236,8 @@ export const updateMovie = async (req, res, next) => {
     }
 
     // Clear cache because new movie added
-    clearMovieCache();
+
+    movieCache.clear();
 
     res.status(200).json({
       success: true,
@@ -238,7 +270,8 @@ export const deleteMovie = async (req, res, next) => {
     }
 
     // Clear cache because new movie added
-    clearMovieCache();
+
+    movieCache.clear();
 
     res.status(200).json({
       success: true,

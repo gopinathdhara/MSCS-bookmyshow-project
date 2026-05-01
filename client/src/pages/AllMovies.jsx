@@ -1,18 +1,31 @@
-import { Card, Col, Input, Row, message } from "antd";
+import { Card, Col, Input, Row, message, Pagination } from "antd";
 import { useEffect, useState } from "react";
 import { getAllMovies } from "../api/movies";
 import { useNavigate } from "react-router-dom";
 
 const AllMovies = () => {
   const [movies, setMovies] = useState([]);
+
+  // User typing value
   const [searchText, setSearchText] = useState("");
+
+  // API search value after debounce delay
+  const [debouncedSearchText, setDebouncedSearchText] = useState("");
+
+  const [page, setPage] = useState(1);
+  const [totalMovies, setTotalMovies] = useState(0);
+
+  const limit = 8;
   const navigate = useNavigate();
 
   const fetchMovies = async () => {
     try {
-      const response = await getAllMovies();
+      // Use debouncedSearchText for API call
+      const response = await getAllMovies(page, limit, debouncedSearchText);
+
       if (response.success) {
         setMovies(response.data);
+        setTotalMovies(response.pagination.totalMovies);
       } else {
         message.error(response.message);
       }
@@ -21,18 +34,26 @@ const AllMovies = () => {
     }
   };
 
+  // Debounce search input
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchText(searchText);
+      setPage(1);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [searchText]);
+
+  // Fetch movies when page or debounced search changes
   useEffect(() => {
     fetchMovies();
-  }, []);
-
-  const filteredMovies = movies.filter((movie) =>
-    movie.title.toLowerCase().includes(searchText.toLowerCase())
-  );
+  }, [page, debouncedSearchText]);
 
   return (
     <div className="all-movies-page">
       <div className="all-movies-header">
-        <h1 style={{marginTop:"20px"}}>All Movies</h1>
+        <h1 style={{ marginTop: "20px" }}>All Movies</h1>
+
         <Input
           placeholder="Search movies..."
           value={searchText}
@@ -43,7 +64,7 @@ const AllMovies = () => {
       </div>
 
       <Row gutter={[24, 24]}>
-        {filteredMovies.map((movie) => (
+        {movies.map((movie) => (
           <Col xs={24} sm={12} md={8} lg={6} key={movie._id}>
             <Card
               hoverable
@@ -63,6 +84,23 @@ const AllMovies = () => {
           </Col>
         ))}
       </Row>
+
+      {totalMovies > limit && (
+        <div
+          style={{
+            marginTop: "30px",
+            display: "flex",
+            justifyContent: "flex-end",
+          }}
+        >
+          <Pagination
+            current={page}
+            pageSize={limit}
+            total={totalMovies}
+            onChange={(pageNumber) => setPage(pageNumber)}
+          />
+        </div>
+      )}
     </div>
   );
 };

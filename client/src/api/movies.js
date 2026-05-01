@@ -1,7 +1,9 @@
 import axiosInstance from "./index.js";
 
-export const getAllMovies = async () => {
-  const response = await axiosInstance.get("/movies/get-all-movies");
+export const getAllMovies = async (page = 1, limit = 8, search = "") => {
+  const response = await axiosInstance.get(
+    `/movies/get-all-movies?page=${page}&limit=${limit}&search=${search}`
+  );
   return response.data;
 };
 
@@ -41,6 +43,8 @@ export const deleteMovie = async (movieId) => {
 };
 
 export const getMovieDetails = async (movieId) => {
-  const response = await axiosInstance.get(`/movies/get-single-movie/${movieId}`);
+  const response = await axiosInstance.get(
+    `/movies/get-single-movie/${movieId}`,
+  );
   return response.data;
 };
