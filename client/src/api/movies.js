@@ -1,8 +1,13 @@
 import axiosInstance from "./index.js";
 
+export const getAllMoviesAdmin = async () => {
+  const response = await axiosInstance.get("/movies/get-all-movies-admin");
+  return response.data;
+};
+
 export const getAllMovies = async (page = 1, limit = 8, search = "") => {
   const response = await axiosInstance.get(
-    `/movies/get-all-movies?page=${page}&limit=${limit}&search=${search}`
+    `/movies/get-all-movies?page=${page}&limit=${limit}&search=${search}`,
   );
   return response.data;
 };

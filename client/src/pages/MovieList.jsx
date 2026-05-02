@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { deleteMovie, getAllMovies } from "../api/movies";
+import { deleteMovie, getAllMoviesAdmin } from "../api/movies";
 import { useEffect } from "react";
 import MovieForm from "./MovieForm";
 import { Button, Table, message, Popconfirm, Tooltip } from "antd";
@@ -14,7 +14,7 @@ function MovieList() {
   const fetchMovies = async () => {
     try {
       setLoading(true);
-      const res = await getAllMovies();
+      const res = await getAllMoviesAdmin();
       setMovies(res.data);
       setLoading(false);
     } catch (err) {
