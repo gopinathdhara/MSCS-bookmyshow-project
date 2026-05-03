@@ -6,7 +6,7 @@ export default function HomeBanner() {
         borderRadius: "16px",
         overflow: "hidden",
         position: "relative",
-        height: "320px",
+        height: "360px",
         backgroundImage:
           "url('/banner.jpg')",
         backgroundSize: "cover",
@@ -18,7 +18,7 @@ export default function HomeBanner() {
     backgroundImage: "linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('/banner.jpg')",
     backgroundSize: "cover",
     backgroundPosition: "center",
-    height: "350px",
+    height: "360px",
     borderRadius: "20px",
     display: "flex",
     justifyContent: "center",
@@ -28,12 +28,12 @@ export default function HomeBanner() {
     textAlign: "center",
   }}
 >
-        <h1 className="footer_cls" style={{ fontSize: "38px", marginBottom: "10px" }}>
-          Welcome to BookMyShow
+        {/* <h1 className="footer_cls" style={{ fontSize: "38px", marginBottom: "10px",textTransform:"uppercase" }}>
+          Welcome to  CineVerse
         </h1>
         <p className="footer_cls" style={{ fontSize: "18px", maxWidth: "500px", marginBottom: "18px",textAlign:"center",margin:"0 auto" }}>
           Book movie tickets easily and explore the latest shows near you.
-        </p>
+        </p> */}
         
       </div>
     </div>

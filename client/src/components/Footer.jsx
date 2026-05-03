@@ -16,13 +16,22 @@ export default function Footer() {
         className="footer_cls"
         style={{ margin: 0, fontSize: "14px", color: "white" }}
       >
-        © 2026 BookMyShow. All Rights Reserved.
+        © 2026 CineVerse. All Rights Reserved.
       </p>
       <p
         className="footer_cls"
         style={{ margin: "6px 0 0 0", fontSize: "13px", color: "#d1d5db" }}
       >
         Built with using React, Node.js, Express, and MongoDB
+      </p>
+      <p
+        className="footer_cls"
+        style={{ margin: "6px 0 0 0", fontSize: "13px", color: "#9ca3af" }}
+      >
+        Contact Admin:{" "}
+        <a href="mailto:gopi17.dhara@gmail.com" className="footer-link">
+          gopi17.dhara@gmail.com
+        </a>
       </p>
     </div>
   );

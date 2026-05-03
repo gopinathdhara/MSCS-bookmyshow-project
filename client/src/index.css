@@ -552,6 +552,50 @@ h1 {
   }
 }
 
+/* for website logo  */
+
+.cineverse-logo {
+  font-size: 42px;
+  font-weight: 800;
+  font-family: "Poppins", sans-serif;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+
+  background: linear-gradient(90deg, #ff4d4d, #ffcc00, #00c6ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  text-shadow:
+    0 0 10px rgba(255, 77, 77, 0.6),
+    0 0 20px rgba(255, 204, 0, 0.4);
+
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.cineverse-logo span {
+  color: #ffffff;
+  -webkit-text-fill-color: #ffffff;
+}
+
+.cineverse-logo:hover {
+  transform: scale(1.05);
+  text-shadow:
+    0 0 15px rgba(0, 198, 255, 0.8),
+    0 0 25px rgba(255, 77, 77, 0.8);
+}
+
+/* footer */
+
+.footer-link {
+  color: white !important;
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  color: #60a5fa !important; /* nice hover effect */
+}
+
 /*============for movie ===================*/
 
 .movie-list-page {
@@ -632,8 +676,6 @@ h1 {
 .seat-btn:hover {
   transform: scale(1.1);
 }
-
-
 
 .movie-poster {
   width: 140px;

@@ -55,7 +55,9 @@ function Navbar() {
     <div className="navbar">
       <div className="logo">
         <Link to="/" className="logo-link">
-          BookMyShow
+          <h1 class="cineverse-logo">
+            <span>Cine</span>Verse
+          </h1>
         </Link>
       </div>
 

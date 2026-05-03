@@ -27,6 +27,13 @@ const AdminBookings = () => {
     getData();
   }, []);
 
+
+  const totalRevenue = bookings.reduce((acc, booking) => {
+    const amount =
+      (booking.seats?.length || 0) * (booking.show?.ticketPrice || 0);
+    return acc + amount;
+  }, 0);
+
   const columns = [
     {
       title: "User",
@@ -89,6 +96,19 @@ const AdminBookings = () => {
   return (
     <div style={{ padding: "20px" }}>
       <h1 className="admin-movie-list">All Bookings</h1>
+      <div
+        style={{
+          background: "#f0f9ff",
+          padding: "15px 20px",
+          borderRadius: "8px",
+          marginBottom: "20px",
+          fontWeight: "600",
+          fontSize: "18px",
+          color: "#1d4ed8",
+        }}
+      >
+        Total Revenue: ₹ {totalRevenue.toLocaleString()}
+      </div>
       <Table
         rowKey="_id"
         columns={columns}
