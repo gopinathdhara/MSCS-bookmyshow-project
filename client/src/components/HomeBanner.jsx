@@ -15,7 +15,8 @@ export default function HomeBanner() {
     >
       <div
   style={{
-    backgroundImage: "linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('/banner.jpg')",
+    backgroundImage:
+      "linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('/banner.jpg?v=2')",
     backgroundSize: "cover",
     backgroundPosition: "center",
     height: "360px",
