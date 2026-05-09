@@ -1,127 +1,103 @@
-# Bookmyshow Capstone Final Project For MS CS
+# Final Capstone Project For MS CS
 
-##  Project Overview
+# CineVerse – Movie Ticket Booking System
 
-This project is a full-stack web application implementing secure user
-authentication similar to BookMyShow. Users can register, log in, and
-access protected profile data using JWT authentication.
+## Project Overview
 
-------------------------------------------------------------------------
+CineVerse is a full-stack movie ticket booking web application inspired by the BookMyShow platform. The application allows users to browse movies, view theatres and show timings, select seats, book tickets, make online payments, and receive booking confirmation emails.
 
-##  Features
+The project is developed using the MERN stack (MongoDB, Express.js, React.js, and Node.js) and includes secure authentication, role-based access control, payment gateway integration, real-time notifications, caching, and performance optimization techniques.
 
--   User Registration
--   User Login
--   JWT Authentication
--   Token Expiry Handling
--   Protected Routes
--   Logout Functionality
--   Profile Page
--   Axios API Integration
--   Ant Design UI
+---
 
-------------------------------------------------------------------------
+## Features
 
-##  Tech Stack
+### User Features
+- User Registration & Login
+- JWT Authentication
+- Forgot Password & Reset Password
+- Browse Movies
+- Search Movies
+- Featured Movies
+- Trending Movies
+- Recently Viewed Movies
+- Seat Selection & Ticket Booking
+- Stripe Payment Integration
+- Booking History
+- Booking Confirmation Email
 
-### Frontend
+### Admin Features
+- Add / Update / Delete Movies
+- Manage Featured Movies
+- Approve / Reject Theatres
+- View All Bookings
+- Real-Time Booking Notifications using Socket.IO
 
--   React.js
--   Ant Design
--   Axios
--   React Router
+### Partner Features
+- Add Theatres
+- View Theatre Approval Status
+- Add & Manage Shows
+- View Theatre Bookings
 
-### Backend
+---
 
--   Node.js
--   Express.js
--   MongoDB (Mongoose)
-
-### Authentication
-
--   JWT (JSON Web Token)
--   bcrypt
-
-------------------------------------------------------------------------
-
-##  Folder Structure
-
-backend/ controllers/ middlewares/ models/ routes/ utils/
-
-frontend/ src/ api/ components/ pages/
-
-------------------------------------------------------------------------
-
-##  Authentication Flow
-
-1.  User registers
-2.  User logs in
-3.  JWT token generated
-4.  Token stored in localStorage
-5.  Token sent in Authorization header
-6.  Middleware verifies token
-7.  Protected routes accessed
-
-------------------------------------------------------------------------
-
-##  Token Handling
-
--   Tokens expire (e.g., 1 minute for testing)
--   Axios interceptor handles 401 errors
--   Redirects user to login page if expired
-
-------------------------------------------------------------------------
-
-##  Logout
-
--   Removes token from localStorage
--   Redirects to login page
-
-------------------------------------------------------------------------
-
-##  API Endpoints
-
-  Method   Endpoint              Description
-  -------- --------------------- ------------------
-  POST     /api/users/register   Register user
-  POST     /api/users/login      Login user
-  GET      /api/users/me         Get current user
-
-------------------------------------------------------------------------
-
-##  Installation
-
-### Backend
-
-cd backend\
-npm install\
-npm start
+## Tech Stack
 
 ### Frontend
+- React.js
+- Ant Design
+- Axios
+- React Router DOM
+- Socket.IO Client
 
-cd frontend\
-npm install\
-npm run dev
+### Backend
+- Node.js
+- Express.js
+- MongoDB Atlas
+- Mongoose
+- Socket.IO
 
-------------------------------------------------------------------------
+### Authentication & Security
+- JWT Authentication
+- bcrypt Password Hashing
+- Helmet
+- express-rate-limit
+- express-mongo-sanitize
 
-##  Environment Variables
+### Payment Integration
+- Stripe Payment Gateway
 
-Create .env file:
+### Email Services
+- Nodemailer
+- SendGrid
 
-JWT_SECRET=your_secret\
-MONGO_URI=your_mongodb_uri
+### Deployment
+- AWS EC2
+- Nginx
+- PM2
 
-------------------------------------------------------------------------
+---
 
-##  Future Scope
+## Folder Structure
 
--   Movie listing
--   Booking system
--   Payment integration
--   Admin dashboard
-
-------------------------------------------------------------------------
+```bash
+MSCS-bookmyshow-project/
+│
+├── client/
+│   ├── src/
+│   ├── public/
+│   ├── package.json
+│
+├── server/
+│   ├── controllers/
+│   ├── middlewares/
+│   ├── models/
+│   ├── routes/
+│   ├── config/
+│   ├── utils/
+│   ├── package.json
+│
+├── README.md
 
 ##  Author
 
