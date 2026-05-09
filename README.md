@@ -98,8 +98,9 @@ MSCS-bookmyshow-project/
 │   ├── package.json
 │
 ├── README.md
+```
 
 ##  Author
 
-Gopinath Dhara\
+**Gopinath Dhara**  
 Assistant Consultant at TCS
