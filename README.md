@@ -1,6 +1,6 @@
-# Final Capstone Project For MS CS
+ # CineVerse – Movie Ticket Booking System
 
-# CineVerse – Movie Ticket Booking System
+ ### Final Capstone Project For MS CS at Scaler Neovarsity
 
 ## Project Overview
 
