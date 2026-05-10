@@ -1,10 +1,15 @@
-import { Table, message, Tag } from "antd";
+import { Table, message, Tag,Input, Spin } from "antd";
 import { useEffect, useState } from "react";
 import { getPartnerBooking } from "../api/booking";
 
 const PartnerBookings = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(false);
+
+   // for search
+  const [searchText, setSearchText] = useState("");
+  // for search loading
+  const [searchLoading, setSearchLoading] = useState(false);
 
   const getData = async () => {
     try {
@@ -86,7 +91,12 @@ const PartnerBookings = () => {
     },
   ];
 
-  const totalRevenue = bookings.reduce((acc, booking) => {
+  // Filter booking records
+  const filteredBookings = bookings.filter((booking) =>
+    JSON.stringify(booking).toLowerCase().includes(searchText.toLowerCase()),
+  );
+
+  const totalRevenue = filteredBookings.reduce((acc, booking) => {
     const amount =
       (booking.seats?.length || 0) * (booking.show?.ticketPrice || 0);
     return acc + amount;
@@ -108,14 +118,51 @@ const PartnerBookings = () => {
       >
         Total Revenue: ₹ {totalRevenue.toLocaleString()}
       </div>
-      <Table
-        rowKey="_id"
-        columns={columns}
-        dataSource={bookings}
-        loading={loading}
-        bordered
-        pagination={{ pageSize: 5 }}
+      <Input
+        placeholder="Search bookings..."
+        size="large"
+        allowClear
+        value={searchText}
+        onChange={(e) => {
+          setSearchText(e.target.value);
+          setSearchLoading(true);
+
+          setTimeout(() => {
+            setSearchLoading(false);
+          }, 300);
+        }}
+        style={{
+          width: "380px",
+          height: "50px",
+          marginBottom: "28px",
+          padding: "0 16px",
+          borderRadius: "10px",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+          border: "1px solid #d9d9d9",
+          backgroundColor: "#ffffff",
+        }}
       />
+      {searchLoading ? (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "200px",
+          }}
+        >
+          <Spin size="large" />
+        </div>
+      ) : (
+        <Table
+          rowKey="_id"
+          columns={columns}
+          dataSource={filteredBookings}
+          loading={loading}
+          bordered
+          pagination={{ pageSize: 5 }}
+        />
+      )}
     </div>
   );
 };
