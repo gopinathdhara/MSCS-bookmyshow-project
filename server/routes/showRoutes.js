@@ -34,6 +34,7 @@ router.get(
 router.get(
   "/get-by-theatre",
   authMiddleware,
+  partnerMiddleware,
   validateGetShowsByTheatre,
   getShowsByTheatre,
 );
