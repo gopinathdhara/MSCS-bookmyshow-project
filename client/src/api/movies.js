@@ -12,6 +12,13 @@ export const getAllMovies = async (page = 1, limit = 8, search = "") => {
   return response.data;
 };
 
+export const getAllMoviesForShow = async () => {
+  const response = await axiosInstance.get(
+    `/movies/get-all-movies-for-show`,
+  );
+  return response.data;
+};
+
 export const getLatestMovies = async () => {
   const response = await axiosInstance.get("/movies/get-latest-movies");
   return response.data;

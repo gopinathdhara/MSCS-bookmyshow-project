@@ -16,7 +16,7 @@ import {
 import { EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { getShowsByTheatre, addShow } from "../api/shows.js";
 import { Form, Input, Modal } from "antd";
-import { getAllMovies } from "../api/movies.js";
+import { getAllMovies,getAllMoviesForShow } from "../api/movies.js";
 import { useParams } from "react-router-dom";
 const { Title, Text } = Typography;
 
@@ -40,7 +40,7 @@ function TheatreShows() {
         setShows(res.data);
       }
 
-      const moviesRes = await getAllMovies();
+      const moviesRes = await getAllMoviesForShow();
 
       if (moviesRes.success) setMovies(moviesRes.data);
 

@@ -8,11 +8,13 @@ import {
   getAllFeaturedMovies,
   getTrendingMovies,
   getLatestMovies,
-  getAllMoviesAdmin
+  getAllMoviesAdmin,
+  getAllMoviesForShow
 } from "../controllers/movieController.js";
 
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 import { adminMiddleware } from "../middlewares/adminMiddleware.js";
+import { partnerMiddleware } from "../middlewares/partnerMiddleware.js";
 
 const movieRouter = express.Router();
 movieRouter.post("/add-movie", authMiddleware, adminMiddleware, addMovie);
@@ -34,4 +36,6 @@ movieRouter.delete(
   deleteMovie,
 );
 movieRouter.get("/get-trending-movies", getTrendingMovies);
+
+movieRouter.get("/get-all-movies-for-show", authMiddleware, partnerMiddleware, getAllMoviesForShow);
 export default movieRouter;

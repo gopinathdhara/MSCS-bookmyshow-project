@@ -131,6 +131,32 @@ export const getAllMoviesAdmin = async (req, res, next) => {
   }
 };
 
+// get all movies for show
+
+export const getAllMoviesForShow = async (req, res, next) => {
+  try {
+    let movies = await movie.find({}).sort({ createdAt: -1 });
+
+    if (!movies || movies.length === 0) {
+      return res.status(200).json({
+        success: true,
+        message: "No movies found",
+        data: [],
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "all Movie fetched successfully",
+      data: movies,
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+
 // list of latest movies
 export const getLatestMovies = async (req, res, next) => {
   try {
